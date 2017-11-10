@@ -1,0 +1,513 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+   
+
+    <title>Album example for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <!--<link href="album.css" rel="stylesheet">-->
+
+    <script src="https://cdn.rawgit.com/naptha/tesseract.js/0.2.0/dist/tesseract.js"></script>
+    <style>
+        #formatted_invoice {
+            visibility: hidden;
+        }
+        .card {
+            width: 18rem;
+            padding: 0.5rem;
+        }
+        .card img {
+            width: 100%;
+        }
+        .card .card-text {
+            font-size: 100%;
+            text-align: center;
+        }
+    </style>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="collapse bg-dark" id="navbarHeader">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-8 py-4">
+              <h4 class="text-white">About</h4>
+              <p class="text-muted">Add some information about the album below, the author, or any other background context. Make it a few sentences long so folks can pick up some informative tidbits. Then, link them off to some social networking sites or contact information.</p>
+            </div>
+            <div class="col-sm-4 py-4">
+              <h4 class="text-white">Contact</h4>
+              <ul class="list-unstyled">
+                <li><a href="#" class="text-white">Follow on Twitter</a></li>
+                <li><a href="#" class="text-white">Like on Facebook</a></li>
+                <li><a href="#" class="text-white">Email me</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="navbar navbar-dark bg-dark">
+        <div class="container d-flex justify-content-between">
+          <a href="#" class="navbar-brand">Album</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main role="main">
+        <div class="container">
+            <div class="row">
+                    <div class="col-3">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="card mt-5">
+                                        <img src="/invoice-copy-copies-of-invoices.png" alt="invoice">
+                                        <p class="card-text">Invoice 1</p>
+                                        <button type="button" id="go_button" class="btn btn-primary float-right">Run</button>
+                                        <!--<div class="btn-group" role="group" aria-label="Basic example">
+                                            <button type="button" id="go_button" class="btn btn-secondary float-right">Run</button>
+                                        </div>-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <form class="col-9 mt-5">
+                            <div id="ocr_status"> </div>
+                            <div class="form-group">
+                                <textarea rows="15" class="form-control" id="ocr_results"> </textarea>
+                            </div>
+                            <button type="button" id="format_button" class="btn btn-primary float-right">Format</button>
+                        </form>
+            </div>
+            
+        <!--<input type="text" id="url" placeholder="Image URL" />
+        <input type="button" id="go_button" value="Run" />
+        <input type="button" id="format_button" value="Format" />-->
+        
+        
+        <section id="formatted_invoice" class="text-center container">
+            
+
+                <h6 class="mt-5 mb-0">Authorized VW Dealer</h6>
+                <h4 class="mt-0 mb-0">Global Gallarie Motors Pvt Ltd</h4>
+                <p class="lead mt-0 mb-0">Plot# 1, Mohan Mill Compound</p>
+                <p class="lead mt-0 mb-0">Ghodbunder Rd,Opp. Levi's SR, Thane, 400607</p>
+                <div class="d-flex justify-content-between">
+                    <div class="d-block">
+                        <p class="d-inline"><strong>VAT R.C. No.:</strong></p>
+                        <p class="d-inline">27180770320V</p>
+                    </div>
+                    <div class="d-block">
+                        <p class="d-inline"><strong>Phone No.</strong></p>
+                        <p class="d-inline">022 57354444/07735534444</p>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div class="d-block">
+                        <p class="d-inline"><strong>C.S.T.R.C No.:</strong></p>
+                        <p class="d-inline">27180770320C</p>
+                    </div>
+                    <div class="d-block">
+                        <p class="d-inline"><strong>Fax No.</strong></p>
+                        <p class="d-inline">022 25592395</p>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div class="d-block">
+                        <p class="d-inline"><strong>Ser. Tax. No.:</strong></p>
+                        <p class="d-inline">AADCG7539KSDUD1</p>
+                    </div>
+                    <div class="d-block">
+                        <p class="d-inline"><strong>E-Mail</strong></p>
+                        <p class="d-inline">service@vw-ggmpl.co.in</p>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div class="d-block">
+                        <p class="d-inline"><strong>PAN:</strong></p>
+                        <p class="d-inline">AADCG7539K</p>
+                    </div>
+                </div>
+                <hr>
+                
+                <h1 class="jumbotr on-heading">Tax Invoice</h1>
+                <div class="d-flex justify-content-between">
+                    <div class="d-block">
+                        <p class="d-inline"><strong>Repair Order No.</strong></p>
+                        <p class="d-inline">50104745</p>
+                    </div>
+                    <div class="d-block">
+                        <p class="d-inline"><strong>Invoice No.</strong></p>
+                        <p class="d-inline">SIP/JUL/0457</p>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div class="d-block">
+                        <p class="d-inline"><strong>Repair Order Date</strong></p>
+                        <p class="d-inline">20-Jul-11</p>
+                    </div>
+                    <div class="d-block">
+                        <p class="d-inline"><strong>Invoice Date</strong></p>
+                        <p class="d-inline">20-Jul-11</p>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div class="d-block">
+                        <p class="d-inline"><strong>Customer Name</strong></p>
+                        <p class="d-inline"></p>
+                    </div>
+                    <div class="d-block">
+                        <p class="d-inline"><strong>Regn. No.</strong></p>
+                        <p class="d-inline"></p>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div class="d-block">
+                        <p class="d-inline"><strong>Customer Add.</strong></p>
+                        <p class="d-inline"></p>
+                    </div>
+                    <div class="d-block">
+                        <p class="d-inline"><strong>VIN</strong></p>
+                        <p class="d-inline"></p>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <div class="d-block">
+                        <p class="d-inline"><strong>Model</strong></p>
+                        <p class="d-inline">Vento Trendiine</p>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <div class="d-block">
+                        <p class="d-inline"><strong>Kms In</strong></p>
+                        <p class="d-inline">14,900</p>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <div class="d-block">
+                        <p class="d-inline"><strong>Kms Out</strong></p>
+                        <p class="d-inline">14,900</p>
+                    </div>
+                </div>        
+            </section>
+            <h4 class="mt-5">Demanded Repair (Customer Voice)</h4>
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>do 15000km service</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>check under carrige noise</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3 class="mt-5 text-center">Labor Details</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">S. No.</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Labor Code</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Rate</th>
+                        <th scope="col">Qty.</th>
+                        <th scope="col"></th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Ser. Tax (10.3%)</th>
+                        <th scope="col">WCT @ (8.00%)</th>
+                        <th scope="col">Amount incl. Tax</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>SERVICING CHARGES</td>
+                        <td>00000030</td>
+                        <td>Paid</td>
+                        <td>3.50</td>
+                        <td class="text-right">150</td>
+                        <td></td>
+                        <td class="text-right">525.00</td>
+                        <td class="text-right">54.08</td>
+                        <td></td>
+                        <td class="text-right">579.08</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Washing</td>
+                        <td>00000002</td>
+                        <td>Paid</td>
+                        <td>3.50</td>
+                        <td class="text-right">186</td>
+                        <td></td>
+                        <td class="text-right">651.00</td>
+                        <td class="text-right">67.05</td>
+                        <td></td>
+                        <td class="text-right">718.05</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>VAS Scaning</td>
+                        <td>00000010</td>
+                        <td>Paid</td>
+                        <td>3.50</td>
+                        <td class="text-right">114</td>
+                        <td></td>
+                        <td class="text-right">399.00</td>
+                        <td class="text-right">41.10</td>
+                        <td></td>
+                        <td class="text-right">440.10</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">4</th>
+                        <td>CONSUMABLE</td>
+                        <td>00000003</td>
+                        <td>Paid</td>
+                        <td>3.50</td>
+                        <td class="text-right">100</td>
+                        <td></td>
+                        <td class="text-right">350.00</td>
+                        <td class="text-right">36.05</td>
+                        <td></td>
+                        <td class="text-right">386.05</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">5</th>
+                        <td>brake cleaning</td>
+                        <td>2525</td>
+                        <td>Paid</td>
+                        <td>3.50</td>
+                        <td class="text-right">129</td>
+                        <td></td>
+                        <td class="text-right">451.50</td>
+                        <td class="text-right">46.50</td>
+                        <td></td>
+                        <td class="text-right">498.00</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="text-right" colspan="8"><strong>2,376.50</strong></td>
+                        <td class="text-right"><strong>244.78</strong></td>
+                        <td class="text-right" colspan="2"><strong>2,621.28</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <h3 class="mt-5 text-center">Parts Details</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">S. No.</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Part No.</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Rate</th>
+                        <th scope="col">Qty.</th>
+                        <th scope="col"></th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Ser. Tax (10.3%)</th>
+                        <th scope="col">WCT @ (8.00%)</th>
+                        <th scope="col">Amount incl. Tax</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Oil Filter</td>
+                        <td>03L115562</td>
+                        <td>Paid</td>
+                        <td>1</td>
+                        <td class="text-right">327.11</td>
+                        <td></td>
+                        <td class="text-right">100.00</td>
+                        <td class="text-right">327.11</td>
+                        <td class="text-right">12.50></td>
+                        <td class="text-right">40.89</td>
+                        <td class="text-right">368.00</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>AIR FILTER</td>
+                        <td>6R0129620A</td>
+                        <td>Paid</td>
+                        <td>1</td>
+                        <td class="text-right">275.56</td>
+                        <td></td>
+                        <td class="text-right">100.00</td>
+                        <td class="text-right">275.56</td>
+                        <td class="text-right">12.50></td>
+                        <td class="text-right">34.45</td>
+                        <td class="text-right">310.01</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>PLUG WITH</td>
+                        <td>N 90813202</td>
+                        <td>Paid</td>
+                        <td>1</td>
+                        <td class="text-right">67.36</td>
+                        <td></td>
+                        <td class="text-right">100.00</td>
+                        <td class="text-right">67.36</td>
+                        <td class="text-right">12.50></td>
+                        <td class="text-right">8.42</td>
+                        <td class="text-right">75.78</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">4</th>
+                        <td>WINDSHIELD CLEANER CO</td>
+                        <td>G 052164M1</td>
+                        <td>Paid</td>
+                        <td>1</td>
+                        <td class="text-right">226.98</td>
+                        <td></td>
+                        <td class="text-right">100.00</td>
+                        <td class="text-right">226.98</td>
+                        <td class="text-right">12.50></td>
+                        <td class="text-right">28.37</td>
+                        <td class="text-right">255.35</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">5</th>
+                        <td>CASTROL ENGINE OIL 4LT</td>
+                        <td>LP-5W40-4</td>
+                        <td>Paid</td>
+                        <td>1</td>
+                        <td class="text-right">3,342.23</td>
+                        <td></td>
+                        <td class="text-right">100.00</td>
+                        <td class="text-right">3,342.23</td>
+                        <td class="text-right">12.50></td>
+                        <td class="text-right">417.78</td>
+                        <td class="text-right">3,760.01</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">5</th>
+                        <td>CASTROL ENGINE OIL 1LT</td>
+                        <td>LP-5W40-1</td>
+                        <td>Paid</td>
+                        <td>1</td>
+                        <td class="text-right">862.23</td>
+                        <td></td>
+                        <td class="text-right">100.00</td>
+                        <td class="text-right">862.23</td>
+                        <td class="text-right">12.50></td>
+                        <td class="text-right">107.78</td>
+                        <td class="text-right">970.01</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">5</th>
+                        <td>DUST AND POLLEN FILTER</td>
+                        <td>6Q0820367B</td>
+                        <td>Paid</td>
+                        <td>1</td>
+                        <td class="text-right">635.47</td>
+                        <td></td>
+                        <td class="text-right">100.00</td>
+                        <td class="text-right">635.47</td>
+                        <td class="text-right">12.50></td>
+                        <td class="text-right">79.43</td>
+                        <td class="text-right">714.90</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="text-right" colspan="9"><strong>5,736.94</strong></td>
+                        <td class="text-right" colspan="2"><strong>717.12</strong></td>
+                        <td class="text-right"><strong>6,454.06</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="12">
+                            <div class="d-flex justify-content-end">
+                                <div class="d-block">
+                                    <p class="d-inline lead"><strong>Total Parts And Labor</strong></p>
+                                    <p class="d-inline lead">9.075.00</p>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="12">
+                            <div class="justify-content-start">
+                                <div class="d-block">
+                                    <p class="d-inline lead"><strong>Rupees:</strong></p>
+                                    <p class="d-inline lead">NINE THOUSAND SEVENTY FIVE RUPEES AND ZERO PAISA ONLY</p>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+      
+    </main>
+
+    <!--<footer class="text-muted">
+      <div class="container">
+        <p class="float-right">
+          <a href="#">Back to top</a>
+        </p>
+        <p>Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
+        <p>New to Bootstrap? <a href="../../">Visit the homepage</a> or read our <a href="../../getting-started/">getting started guide</a>.</p>
+      </div>
+    </footer>-->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="lib/jquery/dist/jquery.min.js"><\/script>')</script>
+    <script src="lib/popper/dist/popper.min.js"></script>
+    <script src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!--<script src="../../../../assets/js/vendor/holder.min.js"></script>
+    <script>
+      Holder.addTheme('thumb', {
+        bg: '#55595c',
+        fg: '#eceeef',
+        text: 'Thumbnail'
+      });
+    </script>-->
+
+    <script>
+            function runOCR(url) {
+                Tesseract.recognize(url)
+                    .then(function(result) {
+                        document.getElementById("ocr_results")
+                                .value = result.text;
+                    }).progress(function(result) {
+                        document.getElementById("ocr_status")
+                                .innerText = result["status"] + " (" +
+                                    (result["progress"] * 100) + "%)";
+                    });
+            }
+    
+            document.getElementById("go_button")
+            .addEventListener("click", function(e) {
+                //var url = document.getElementById("url").value;
+                var url ="http://localhost:3000/invoice-copy-copies-of-invoices.png";
+                runOCR(url);
+            });
+    
+            document.getElementById("format_button")
+            .addEventListener("click", function(e) {
+                document.getElementById("formatted_invoice").style.visibility = "visible";
+            });
+        </script>
+  </body>
+</html>

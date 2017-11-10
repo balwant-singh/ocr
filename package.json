@@ -1,0 +1,32 @@
+{
+  "name": "ocr",
+  "version": "1.0.0",
+  "description": "ocr demo app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/balwant-singh/ocr.git"
+  },
+  "keywords": [
+    "ocr"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/balwant-singh/ocr/issues"
+  },
+  "homepage": "https://github.com/balwant-singh/ocr#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "bootstrap": "^4.0.0-beta.2",
+    "cors": "^2.8.4",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "jquery": "^3.2.1",
+    "mongoose": "^4.11.10",
+    "popper.js": "^1.12.3"
+  }
+}
