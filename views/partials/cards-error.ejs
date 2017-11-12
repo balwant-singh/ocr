@@ -1,0 +1,8 @@
+<div class="row">
+    <% invoices.forEach(function(invoice) { %>
+        <a href="/card-process?invoice=<%= invoice.fileName %>&invoiceType=error_invoices&isError=<%= invoice.isError %>" class="card mt-5 mr-3 col-2">
+            <img src="error_invoices/<%= invoice.fileName %>" alt="invoice">
+            <p class="card-text"><%= invoice.fileName %></p>
+        </a>
+    <% }); %>
+</div>
