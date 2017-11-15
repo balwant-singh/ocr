@@ -31,4 +31,10 @@ router.get('/card-process', (req, res)=>{
     res.render('card-process', {parentPath: unProcessedParentPath, fileName: req.query.invoice, invoiceType: req.query.invoiceType, isError: req.query.isError});
 });
 
+router.get('/error-management', (req, res)=>{
+    var errorInvoices = factory._getInvoices(errorInvoicesParentPath);
+    res.render('error-management', {invoices: errorInvoices});
+});
+
+
 module.exports = router;

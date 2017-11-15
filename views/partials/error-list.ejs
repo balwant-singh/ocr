@@ -1,0 +1,26 @@
+<h2 class="mt-5">Error Tracker</h2>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+            
+      <tr>
+        <th>SAP PO Number</th>
+        <th>Invoice No.</th>
+        <th>Vendor</th>
+        <th>Debit/Credit</th>
+        <th>Net Value</th>
+      </tr>
+    </thead>
+    <tbody>
+        <% invoices.forEach(function(invoice, i) { %>
+            <tr>
+                <td><a href="#">20000<%= i+1 %></a></td>
+                <td>XXXXXX</td>
+                <td>XXXXXX</td>
+                <td>XXXXXX</td>
+                <td>XXXXXX</td>
+            </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</div>

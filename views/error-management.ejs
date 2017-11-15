@@ -15,25 +15,14 @@
     <link href="css/style.css" rel="stylesheet">
 
     <script src="https://cdn.rawgit.com/naptha/tesseract.js/0.2.0/dist/tesseract.js"></script>
-    <style>
-        .card {
-            padding: 0.5rem;
-        }
-        .card img {
-            width: 100%;
-        }
-        .card .card-text {
-            font-size: 100%;
-            text-align: center;
-        }
-    </style>
+    
   </head>
 
   <body>
     <% include partials/header.ejs %>
     <main role="main">
         <div class="container">
-            <% include partials/cards-unprocessed.ejs %>
+            <% include partials/error-list.ejs %>
         </div>
     </main>
     <!-- Bootstrap core JavaScript
