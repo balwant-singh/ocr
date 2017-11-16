@@ -23,17 +23,36 @@ router.get('/card-list-error', (req, res)=>{
 });
 
 router.get('/card-process', (req, res)=>{
-    /*var invoice = req.params.invoice;
-    var index = str.lastIndexOf('.');
-    var fileName = str.substring(0,index);
-    var ext = str.substring(index + 1);*/
-
     res.render('card-process', {parentPath: unProcessedParentPath, fileName: req.query.invoice, invoiceType: req.query.invoiceType, isError: req.query.isError});
 });
 
-router.get('/error-management', (req, res)=>{
+router.get('/dashboard', (req, res)=>{
+    var totalInvoices = [];
+    var unprocessedInvoices = factory._getInvoices(unProcessedParentPath);
+    for(var i = 0; i < unprocessedInvoices.length; i++) {
+        var invoice = {
+            fileName: unprocessedInvoices[i].fileName,
+            type: 'light'
+        }
+        totalInvoices.push(invoice);
+    }
+    var processedInvoices = factory._getInvoices(processedParentPath);
+    for(var i = 0; i < processedInvoices.length; i++) {
+        var invoice = {
+            fileName: processedInvoices[i].fileName,
+            type: 'success'
+        }
+        totalInvoices.push(invoice);
+    }
     var errorInvoices = factory._getInvoices(errorInvoicesParentPath);
-    res.render('error-management', {invoices: errorInvoices});
+    for(var i = 0; i < errorInvoices.length; i++) {
+        var invoice = {
+            fileName: errorInvoices[i].fileName,
+            type: 'danger'
+        }
+        totalInvoices.push(invoice);
+    }
+    res.render('dashboard', {invoices: totalInvoices});
 });
 
 

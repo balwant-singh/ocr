@@ -1,0 +1,34 @@
+<div class="row mt-5">
+  <h2 class="col-8">Dashboard</h2>
+  <div class="d-flex justify-content-end col-4">
+    <p><span class="badge badge-success text-right mr-1">Processed</span></p>
+    <p><span class="badge badge-danger text-right">Error</span></p>
+  </div>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-hover">
+    <thead>  
+      <tr>
+        <th>SAP PO Number</th>
+        <th>File</th>
+        <th>Invoice No.</th>
+        <th>Vendor</th>
+        <th>Debit/Credit</th>
+        <th>Net Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% invoices.forEach(function(invoice, i) { %>
+        <tr class="table-<%= invoice.type %>">
+          <td><a href="#">20000<%= i + 1 %></a></td>
+          <td><%= invoice.fileName %></td>
+          <td>XXXXXX</td>
+          <td>XXXXXX</td>
+          <td>XXXXXX</td>
+          <td>XXXXXX</td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</div>
