@@ -1,5 +1,5 @@
 <div class="row mt-5">
-  <h2 class="col-8">Dashboard</h2>
+  <h2 class="col-8">Post Processing Dashboard</h2>
   <div class="d-flex justify-content-end col-4">
     <p><span class="badge badge-success text-right mr-1">Processed</span></p>
     <p><span class="badge badge-danger text-right">Error</span></p>
@@ -7,28 +7,159 @@
 </div>
 
 <div class="table-responsive">
-  <table class="table table-hover">
+  <table id="dashboard-table" class="table table-hover">
     <thead>  
       <tr>
-        <th>SAP PO Number</th>
+        <th>Unique Number</th>
+        <th>Workflow</th>
         <th>File</th>
         <th>Invoice No.</th>
         <th>Vendor</th>
         <th>Debit/Credit</th>
-        <th>Net Value</th>
+        <th>SAP PO Number</th>
+        <th>Status</th>
       </tr>
     </thead>
     <tbody>
       <% invoices.forEach(function(invoice, i) { %>
-        <tr class="table-<%= invoice.type %>">
-          <td><a href="#">20000<%= i + 1 %></a></td>
-          <td><%= invoice.fileName %></td>
-          <td>XXXXXX</td>
-          <td>XXXXXX</td>
-          <td>XXXXXX</td>
-          <td>XXXXXX</td>
+        <tr data-toggle="modal" data-id="<%= invoice.id %>" data-file="<%= invoice.file %>" data-invoicetype="<%= invoice.invoiceType %>" data-target="#orderModal" class="table-<%= invoice.type %> clickable">
+          <td>20000<%= i + 1 %></td>
+          <td><span class="glyphicon glyphicon-envelope"></span></td>
+          <td><%= invoice.file %></td>
+          <td><%= invoice.invoice_number %></td>
+          <td><%= invoice.supplier %></td>
+          <td><%= invoice.debit_credit %></td>
+          <td><%= invoice.po_number %></td>
+          <td></td>
         </tr>
       <% }); %>
     </tbody>
   </table>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="invoiceDataModal" tabindex="-1" role="dialog" aria-labelledby="invoiceDataModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="invoiceDataModalLabel">Invoice Data</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    
+                    <div class="form-group row">
+                        <label for="file" class="col-sm-6 col-form-label">File</label>
+                        <div class="col-sm-6">
+                            <!--<input type="text" readonly class="form-control-plaintext" id="file" value="">-->
+                            <a id="file" href="#"></a>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="buyer" class="col-sm-6 col-form-label">Buyer</label>
+                        <div class="col-sm-6">
+                            <input type="text" readonly class="form-control-plaintext" id="buyer" value="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="supplier" class="col-sm-6 col-form-label">Supplier</label>
+                        <div class="col-sm-6">
+                            <input type="text" readonly class="form-control-plaintext" id="supplier" value="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="debitCredit" class="col-sm-6 col-form-label">Debit / Credit</label>
+                        <div class="col-sm-6">
+                            <input type="text" readonly class="form-control-plaintext" id="debitCredit" value="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="invoiceNumber" class="col-sm-6 col-form-label">Invoice Number</label>
+                        <div class="col-sm-6">
+                            <input type="text" readonly class="form-control-plaintext" id="invoiceNumber" value="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="invoiceDate" class="col-sm-6 col-form-label">Invoice Date</label>
+                        <div class="col-sm-6">
+                            <input type="text" readonly class="form-control-plaintext" id="invoiceDate" value="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="netValue" class="col-sm-6 col-form-label">Net Value</label>
+                        <div class="col-sm-6">
+                            <input type="text" readonly class="form-control-plaintext" id="netValue" value="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="gstValue" class="col-sm-6 col-form-label">GST Value</label>
+                        <div class="col-sm-6">
+                            <input type="text" readonly class="form-control-plaintext" id="gstValue" value="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="grossValue" class="col-sm-6 col-form-label">Gross Value</label>
+                        <div class="col-sm-6">
+                            <input type="text" readonly class="form-control-plaintext" id="grossValue" value="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="currency" class="col-sm-6 col-form-label">Currency</label>
+                        <div class="col-sm-6">
+                            <input type="text" readonly class="form-control-plaintext" id="currency" value="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="poOrderNumber" class="col-sm-6 col-form-label">PO Order Number</label>
+                        <div class="col-sm-6">
+                            <input type="text" readonly class="form-control-plaintext" id="poOrderNumber" value="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="deliveryNote" class="col-sm-6 col-form-label">Delivery Note</label>
+                        <div class="col-sm-6">
+                            <input type="text" readonly class="form-control-plaintext" id="deliveryNote" value="">
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    <div class="form-group row">
+                        <label for="financeMaterial" class="col-sm-6 col-form-label">Finance / Material</label>
+                        <div class="col-sm-6">
+                            <input type="text" readonly class="form-control-plaintext" id="financeMaterial" value="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="sapPoNumber" class="col-sm-6 col-form-label">SAP PO Number</label>
+                        <div class="col-sm-6">
+                            <input type="text" readonly class="form-control-plaintext" id="sapPoNumber" value="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="vendorCode" class="col-sm-6 col-form-label">Vendor Code</label>
+                        <div class="col-sm-6">
+                            <input type="text" readonly class="form-control-plaintext" id="vendorCode" value="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="discount" class="col-sm-6 col-form-label">Discount</label>
+                        <div class="col-sm-6">
+                            <input type="text" readonly class="form-control-plaintext" id="discount" value="">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+  tr.clickable {
+    cursor: pointer
+  }
+</style>

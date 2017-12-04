@@ -15,15 +15,17 @@
     <link href="css/style.css" rel="stylesheet">
 
     <script src="https://cdn.rawgit.com/naptha/tesseract.js/0.2.0/dist/tesseract.js"></script>
-    
+    <style>
+        main {
+            padding-left: 1rem !important;
+        }
+    </style>
   </head>
 
   <body>
     <% include partials/header.ejs %>
     <main role="main">
-        <div class="container">
-            <% include partials/invoice-list.ejs %>
-        </div>
+        <% include partials/invoice-list.ejs %>
     </main>
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -31,7 +33,58 @@
     <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="lib/jquery/dist/jquery.min.js"><\/script>')</script>-->
     <script src="lib/jquery/dist/jquery.min.js"></script>
-    <script src="lib/popper/dist/popper.min.js"></script>
-    <script src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+    <script>
+        
+        $('#invoiceDataModal').modal({
+                keyboarnd: true,
+                backdrop: "static",
+                show:false,
+        
+            }).on('show.bs.modal', function(){
+                  var file = $(this).data('file');
+                  var invoiceType = $(this).data('invoicetype');
+                  var obj = this;
+                  $.getJSON( "/invoices.json", function( invoices ) {
+                    for(var i = 0; i < invoices.length; i++) { 
+                        if(invoices[i].file === file) {
+                            $(obj).find('#file').text(invoices[i].file);
+                            $(obj).find('#file').attr("href", '/card-process?invoice=' + invoices[i].file + '&invoiceType=' + invoiceType);
+                            //$(obj).find('#file').val(invoices[i].file);
+                            $(obj).find('#buyer').val(invoices[i].buyer);
+                            $(obj).find('#supplier').val(invoices[i].supplier);
+                            $(obj).find('#debitCredit').val(invoices[i].debit_credit);
+                            $(obj).find('#invoiceNumber').val(invoices[i].invoice_number);
+                            $(obj).find('#invoiceDate').val(invoices[i].invoice_date);
+                            $(obj).find('#netValue').val(invoices[i].net_value);
+                            $(obj).find('#gstValue').val(invoices[i].gst_value);
+                            $(obj).find('#grossValue').val(invoices[i].gross_value);
+                            $(obj).find('#currency').val(invoices[i].currency);
+                            $(obj).find('#poOrderNumber').val(invoices[i].po_order_number);
+                            $(obj).find('#deliveryNote').val(invoices[i].delivery_note);
+                            $(obj).find('#financeMaterial').val(invoices[i].finance_material);
+                            $(obj).find('#sapPoNumber').val(invoices[i].sap_po_number);
+                            $(obj).find('#vendorCode').val(invoices[i].vendor_code);
+                            $(obj).find('#discount').val(invoices[i].discount);
+                        }
+                    }
+                });
+
+                
+                
+            });
+        
+          $("#dashboard-table").find('tr[data-target]').on('click', function(){
+                //or do your operations here instead of on show of modal to populate values to modal.
+                //window.location('/card-process?invoice=' + $(this).data('file') + '&invoiceType=' + $(this).data('invoicetype'))
+                window.location.href = '/card-process?invoice=' + $(this).data('file') + '&invoiceType=' + $(this).data('invoicetype')  + '&id=' + $(this).data('id');
+                /*$('#invoiceDataModal').data('file',$(this).data('file'));
+                $('#invoiceDataModal').data('invoicetype',$(this).data('invoicetype'));
+                $('#invoiceDataModal').modal('show');*/
+            });
+        </script>
   </body>
+
 </html>

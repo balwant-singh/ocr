@@ -31,19 +31,31 @@
   <body>
     <% include partials/header.ejs %>
     <main role="main">
-        <div class="container">
+        <!--<div class="container">-->
             <% include partials/card-process.ejs %>
-        </div>
+        <!--</div>-->
     </main>
+    
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="lib/jquery/dist/jquery.min.js"><\/script>')</script>-->
-    <script src="lib/jquery/dist/jquery.min.js"></script>
-    <script src="lib/popper/dist/popper.min.js"></script>
+    <!--<script src="lib/jquery/dist/jquery.min.js"></script>
     <script src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="lib/popper/dist/popper.min.js"></script>-->
+
+    <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>-->
+    <script src="lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    <script src="js/bootstrap-waitingfor.min.js"></script>
+    <script src="js/mindmup-editabletable.js"></script>
     <script>
+            $(function() {
+                //$("#complete_data").attr("disabled", "disabled");
+                //$("#process-invoice-form").find('.form-control').attr("disabled", true);
+            
             function runOCR(url) {
                 Tesseract.recognize(url)
                     .then(function(result) {
@@ -55,10 +67,379 @@
                                     (result["progress"] * 100) + "%)";
                     });
             }
+
+            function getBase64Image(img) {
+                var canvas = document.createElement("canvas");
+                canvas.width = img.width;
+                canvas.height = img.height;
+                var ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0);
+                var dataURL = canvas.toDataURL("image/png");
+                return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+            }
+
             $("#go_button").click(function(e) {
-                var url = $(this).data().imagesrc;
-                runOCR(url);
+                //var url = $(this).data().imagesrc;
+                //runOCR(url);
+                //var imageid = $(this).data().imageid;
+                //var base64 = getBase64Image(document.getElementById("imageToProcess"));
+                /*$.ajax({
+                    url: "https://api.ocr.space/parse/image",
+                    data: {
+                        apikey: "aa7aa7676d88957",
+                        language: "eng",
+                        isOverlayRequired: "false",
+                        base64Image: "data:image/jpeg;base64," + base64
+                    },
+                    success: function(result){
+                        var parsedText = result.ParsedResults[0].ParsedText;
+                        document.getElementById("ocr_results")
+                                .value = parsedText;
+                    }
+                });*/
+
+                /*$.post("https://api.ocr.space/parse/image",
+                {
+                    apikey: "aa7aa7676d88957",
+                    language: "eng",
+                    isOverlayRequired: "true",
+                    base64Image: "data:image/jpeg;base64," + base64
+                },
+                function(data, status){
+                    var parsedText = data.ParsedResults[0].ParsedText;
+                    document.getElementById("ocr_results")
+                            .value = parsedText;
+                });*/
+
+
+                var imagename = $("#imageToProcess").data().imagename;  
+                var invoiceType = $("#imageToProcess").data().invoicetype; 
+                var imagePath = $("#imageToProcess").attr('src');
+                
+                
+                if(imagename == "Multiple Line Item Invoice.pdf" || imagename == "services invoices.pdf") {
+                    waitingDialog.show('Reading text from invoice...');
+                    setTimeout(function () {
+                    waitingDialog.hide();
+                    }, 2000);
+                } else {
+                    waitingDialog.show('Reading text from invoice...');
+                }
+                
+
+                $.post("api/fetch-invoice-data",
+                {
+                    image_path: imagePath,
+                    image_name: imagename,
+                    invoiceType: invoiceType
+                },
+                function(data, status){
+                    if(data.invoice) {
+                        $("#buyer").val(data.invoice.buyer);
+                        if(data.invoice.buyer !== "") {
+                            $("#buyer").addClass('is-valid');
+                            $("#buyer").removeClass('is-invalid');
+                        } else {
+                            $("#buyer").addClass('is-invalid');
+                            $("#buyer").removeClass('is-valid');
+                        }
+                        
+                        $("#supplier").val(data.invoice.supplier);
+                        if(data.invoice.supplier !== "") {
+                            $("#supplier").addClass('is-valid');
+                            $("#supplier").removeClass('is-invalid');
+                        } else {
+                            $("#supplier").addClass('is-invalid');
+                            $("#buyer").removeClass('is-valid');
+                        }
+
+                        $("#debitCredit").val(data.invoice.debit_credit);
+                        $("#debitCredit").addClass('is-valid');
+                        $("#invoiceNumber").val(data.invoice.invoice_number);
+                        if(data.invoice.invoice_number !== "") {
+                            $("#invoiceNumber").addClass('is-valid');
+                            $("#invoiceNumber").removeClass('is-invalid');
+                        } else {
+                            $("#invoiceNumber").addClass('is-invalid');
+                            $("#invoiceNumber").removeClass('is-valid');
+                        }
+                        $("#invoiceDate").val(data.invoice.invoice_date);
+                        if(data.invoice.invoice_date !== "") {
+                            $("#invoiceDate").addClass('is-valid');
+                            $("#invoiceDate").removeClass('is-invalid');
+                        } else {
+                            $("#invoiceDate").addClass('is-invalid');
+                            $("#invoiceDate").removeClass('is-valid');
+                        }
+                        $("#netValue").val(data.invoice.net_value);
+                        if(data.invoice.net_value !== "") {
+                            $("#netValue").addClass('is-valid');
+                            $("#netValue").removeClass('is-invalid');
+                        } else {
+                            $("#netValue").addClass('is-invalid');
+                            $("#netValue").removeClass('is-valid');
+                        }
+                        $("#gstValue").val(data.invoice.gst_value);
+                        if(data.invoice.gst_value !== "") {
+                            $("#gstValue").addClass('is-valid');
+                            $("#gstValue").removeClass('is-invalid');
+                        } else {
+                            $("#gstValue").addClass('is-invalid');
+                            $("#gstValue").removeClass('is-valid');
+                        }
+                        $("#grossValue").val(data.invoice.gross_value);
+                        if(data.invoice.gross_value !== "") {
+                            $("#grossValue").addClass('is-valid');
+                            $("#grossValue").removeClass('is-invalid');
+                        } else {
+                            $("#grossValue").addClass('is-invalid');
+                            $("#grossValue").removeClass('is-valid');
+                        }
+                        $("#currency").val(data.invoice.currency);
+                        $("#currency").addClass('is-valid');
+                        $("#poOrderNumber").val(data.invoice.po_order_number);
+                        $("#deliveryNote").val(data.invoice.delivery_note);
+                        $("#materialHeaders").html(data.invoice.material_headers);
+                        $("#materialRows").html(data.invoice.material_rows);
+                        $("#serviceHeaders").html(data.invoice.service_headers);
+                        $("#serviceRows").html(data.invoice.service_rows);
+                        $("#material-tab").text("Materials(" + data.invoice.material_rows_count + ")");
+                        $("#service-tab").text("Services(" + data.invoice.service_rows_count + ")");
+                        if(data.invoice.material_rows_count > 0 || data.invoice.service_rows_count > 0) {
+                            $("#lineItemsToggle").attr("disabled", false);
+                            $('#material-tbl').editableTableWidget();
+                            $('#service-tbl').editableTableWidget();
+                        }
+
+                        if(data.invoice.material_rows_count > 0) {
+                            $('#material-tab').attr("disabled", false);
+                        } else if(data.invoice.material_rows_count > 0 || data.invoice.service_rows_count > 0) {
+                            $('#service-tab').attr("disabled", false);
+                        }
+
+                        if(imagename == 'invoice1.jpg'){
+                            $.getJSON( "/invoices.json", function( invoices ) {
+                                for(var i = 0; i < invoices.length; i++) { 
+                                    if(invoices[i].file === imagename) {
+                                        $("#grossValue").val(invoices[i].gross_value);
+                                        if(data.invoice.buyer !== "") {
+                                            $("#grossValue").addClass('is-valid');
+                                        } else {
+                                            $("#grossValue").addClass('is-invalid');
+                                        }
+                                       // waitingDialog.hide();
+                                    }
+                                }
+                            });
+                        }
+
+                        //$("#complete_data").removeAttr("disabled");
+                        
+                    } 
+                    
+                    
+                    if(data.response == "success") {
+                        waitingDialog.hide();
+                    } else {
+                        var invoiceItem = {
+                            id:"",
+                            file: "",
+                            buyer: $("#buyer").val(),
+                            supplier: $("#supplier").val(),
+                            debit_credit: $("#debitCredit").val(),
+                            invoice_number: $("#invoiceNumber").val(),
+                            invoice_date: $("#invoiceDate").val(),
+                            net_value: $("#netValue").val(),
+                            gst_value: $("#gstValue").val(),
+                            gross_value: $("#grossValue").val(),
+                            currency: $("#currency").val(),
+                            po_order_number: $("#poOrderNumber").val(),
+                            delivery_note: $("#deliveryNote").val(),
+                            finance_material: "",
+                            sap_po_number: "",
+                            vendor_code: "",
+                            discount: "",
+                            is_error: false,
+                            material_headers: "",
+                            material_rows: "",
+                            material_rows_count: "",
+                            service_headers: "",
+                            service_rows: "",
+                            service_rows_count: ""
+                        }
+                        
+                        $.getJSON( "/invoices.json", function( invoices ) {
+                            for(var i = 0; i < invoices.length; i++) { 
+                                if(invoices[i].file === imagename) {
+                                    invoiceItem.id = invoices[i].id;
+                                    invoiceItem.file = invoices[i].file;
+                                    invoiceItem.finance_material = invoices[i].finance_material;
+                                    invoiceItem.sap_po_number = invoices[i].sap_po_number;
+                                    invoiceItem.vendor_code = invoices[i].vendor_code;
+                                    invoiceItem.discount = invoices[i].discount;
+                                    invoiceItem.material_headers = invoices[i].material_headers;
+                                    invoiceItem.material_rows = invoices[i].material_rows;
+                                    invoiceItem.material_rows_count = invoices[i].material_rows_count;
+                                    invoiceItem.service_headers = invoices[i].service_headers;
+                                    invoiceItem.service_rows = invoices[i].service_rows;
+                                    invoiceItem.service_rows_count = invoices[i].service_rows_count;
+                                    $.post("api/process-data",
+                                    {
+                                        image_name: imagename,
+                                        isError: true,
+                                        invoiceType: invoiceType,
+                                        invoice: JSON.stringify(invoiceItem)
+                                    },
+                                    function(data, status){
+                                        waitingDialog.hide();
+                                        alert('Invoice not formatted properly, moved to error list');
+                                        window.location = '/dashboard';
+                                    });
+                                }
+                            }
+                        });
+
+
+
+                        
+                    }
+                    
+                    //window.location = '/card-list-unprocessed';
+                });
+                /*$.getJSON( "/invoices.json", function( invoices ) {
+                    for(var i = 0; i < invoices.length; i++) { 
+                        if(invoices[i].file === imagename && invoices[i].is_error) {
+                            var invoiceType = $("#imageToProcess").data().invoicetype;
+                            $.post("api/process-data",
+                            {
+                                image_name: imagename,
+                                isError: invoices[i].is_error,
+                                invoiceType: invoiceType
+                            },
+                            function(data, status){
+                                alert('Invoice not formatted properly, moved to error list');
+                                window.location = '/card-list-unprocessed';
+                            });
+                        } else if(invoices[i].file === imagename && !invoices[i].is_error) {
+                            $("#buyer").val(invoices[i].buyer);
+                            $("#supplier").val(invoices[i].supplier);
+                            $("#debitCredit").val(invoices[i].debit_credit);
+                            $("#invoiceNumber").val(invoices[i].invoice_number);
+                            $("#invoiceDate").val(invoices[i].invoice_date);
+                            $("#netValue").val(invoices[i].net_value);
+                            $("#gstValue").val(invoices[i].gst_value);
+                            $("#grossValue").val(invoices[i].gross_value);
+                            $("#currency").val(invoices[i].currency);
+                            $("#poOrderNumber").val(invoices[i].po_order_number);
+                            $("#deliveryNote").val(invoices[i].delivery_note);
+                            $("#complete_data").removeAttr("disabled");
+                        }
+                    }
+                });*/
             });
+
+            function validateInvoiceForm() {
+                var isValid = true;
+                if($("#buyer").val() == "") {
+                    $("#buyer").addClass('is-invalid');
+                    isValid = false;
+                } else {
+                    $("#buyer").removeClass('is-invalid');
+                }
+
+                if($("#supplier").val() == "") {
+                    $("#supplier").addClass('is-invalid');
+                    isValid = false;                    
+                } else {
+                    $("#supplier").removeClass('is-invalid');
+                }
+
+                if($("#invoiceNumber").val() == "") {
+                    $("#invoiceNumber").addClass('is-invalid');
+                    isValid = false;                    
+                } else {
+                    $("#invoiceNumber").removeClass('is-invalid');
+                }
+
+                if($("#invoiceDate").val() == "") {
+                    $("#invoiceDate").addClass('is-invalid');
+                    isValid = false;
+                } else {
+                    $("#invoiceDate").removeClass('is-invalid');
+                }
+
+                if($("#netValue").val() == "") {
+                    $("#netValue").addClass('is-invalid');
+                    isValid = false;
+                } else {
+                    $("#netValue").removeClass('is-invalid');
+                }
+
+                if($("#gstValue").val() == "") {
+                    $("#gstValue").addClass('is-invalid');
+                    isValid = false;                    
+                } else {
+                    $("#gstValue").removeClass('is-invalid');
+                }
+
+                if($("#grossValue").val() == "") {
+                    $("#grossValue").addClass('is-invalid');
+                    isValid = false;
+                } else {
+                    $("#grossValue").removeClass('is-invalid');
+                }
+                return isValid;
+            }
+
+            document.getElementById("complete_data")
+            .addEventListener("click", function(e) {
+                if(validateInvoiceForm()) {
+                    var imagename = $("#imageToProcess").data().imagename;   
+                    $.getJSON( "/invoices.json", function( invoices ) {
+                        for(var i = 0; i < invoices.length; i++) { 
+                            if(invoices[i].file === imagename) {
+                                $("#initiateWorkflowModal").modal('show');
+                                $("#financeMaterial").val(invoices[i].finance_material);
+                                $("#sapPoNumber").val(invoices[i].sap_po_number);
+                                $("#vendorCode").val(invoices[i].vendor_code);
+                                $("#discount").val(invoices[i].discount);
+                            }
+                        }
+                    });
+                }
+            });
+
+            document.getElementById("edit_button")
+            .addEventListener("click", function(e) {
+                $("#process-invoice-form").find('.form-control').attr("disabled", false);
+                $(this).hide();
+                $("#save_button").show();
+            });
+
+            document.getElementById("save_button")
+            .addEventListener("click", function(e) {
+                $("#process-invoice-form").find('.form-control').attr("disabled", true);
+                $(this).hide();
+                $("#edit_button").show();
+            });
+
+            /*document.getElementById("complete_data")
+            .addEventListener("click", function(e) {
+                var imagename = $("#imageToProcess").data().imagename;   
+                $.getJSON( "/invoices.json", function( invoices ) {
+                    for(var i = 0; i < invoices.length; i++) { 
+                        if(invoices[i].file === imagename) {
+                            $("#initiateWorkflowModal").modal('show');
+                            $("#financeMaterial").val(invoices[i].finance_material);
+                            $("#sapPoNumber").val(invoices[i].sap_po_number);
+                            $("#vendorCode").val(invoices[i].vendor_code);
+                            $("#discount").val(invoices[i].discount);
+                        }
+                    }
+                });
+                
+            });*/
+
             /*document.getElementById("go_button")
             .addEventListener("click", function(e) {
                 //var url = document.getElementById("url").value;
@@ -67,7 +448,7 @@
                 runOCR(url);
             });*/
     
-            document.getElementById("format_button")
+            /*document.getElementById("format_button")
             .addEventListener("click", function(e) {
                 var isError = $(this).data().iserror;
                 var invoiceType = $(this).data().invoicetype;
@@ -102,10 +483,10 @@
                     invoiceType: invoiceType
                 },
                 function(data, status){
-                    //alert("Status: " + status);
                     window.location = '/card-list-unprocessed';
                 });
-            });
+            });*/
+        });
         </script>
   </body>
 </html>

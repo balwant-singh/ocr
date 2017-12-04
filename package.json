@@ -24,10 +24,14 @@
     "bootstrap": "^4.0.0-beta.2",
     "cors": "^2.8.4",
     "ejs": "^2.5.7",
+    "ejs-lint": "^0.3.0",
     "express": "^4.16.2",
     "jquery": "^3.2.1",
     "mongoose": "^4.11.10",
+    "pdf-image": "^1.1.0",
+    "pdf2png": "^1.0.5",
     "popper.js": "^1.12.3",
-    "tesseract.js": "^1.0.10"
+    "tesseract.js": "^1.0.10",
+    "xml2js": "^0.4.19"
   }
 }
