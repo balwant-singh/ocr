@@ -7,9 +7,10 @@
                         <div id="invoice-header-container" class="card-header d-flex justify-content-between">
                             <p class="card-header-title"><strong><%= fileName %></strong></p>
                                 <div class=''>
-                                    <button type="button" id="go_button" data-imagesrc="<%= invoiceType %>/<%= fileName %>" data-imagename="<%= fileName %>" class="btn btn-sm btn-primary mr-1">Read</button> 
-                                    <button type="button"  id="complete_data" data-toggle="modal" data-invoicetype="<%= invoiceType %>" class="btn btn-sm btn-primary">Complete Data</button>
-                                        
+                                    <% if(invoiceType !== 'processed') { %>
+                                        <button type="button" id="go_button" data-imagesrc="<%= invoiceType %>/<%= fileName %>" data-imagename="<%= fileName %>" class="btn btn-sm btn-primary mr-1">Read</button> 
+                                        <button type="button"  id="complete_data" data-toggle="modal" data-invoicetype="<%= invoiceType %>" class="btn btn-sm btn-primary">Complete Data</button>
+                                     <% } %>   
                                     <!-- Modal -->
                                     <div class="modal fade" id="initiateWorkflowModal" tabindex="-1" role="dialog" aria-labelledby="initiateWorkflowModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
@@ -117,12 +118,12 @@
                                                                         invoiceItem.sap_po_number = invoices[i].sap_po_number;
                                                                         invoiceItem.vendor_code = invoices[i].vendor_code;
                                                                         invoiceItem.discount = invoices[i].discount;
-                                                                        invoiceItem.material_headers = invoices[i].material_headers;
-                                                                        invoiceItem.material_rows = invoices[i].material_rows;
-                                                                        invoiceItem.material_rows_count = invoices[i].material_rows_count;
-                                                                        invoiceItem.service_headers = invoices[i].service_headers;
-                                                                        invoiceItem.service_rows = invoices[i].service_rows;
-                                                                        invoiceItem.service_rows_count = invoices[i].service_rows_count;
+                                                                        invoiceItem.material_headers = $("#materialHeaders").html();
+                                                                        invoiceItem.material_rows = $("#materialRows").html();
+                                                                        invoiceItem.material_rows_count = $("#materialRows tr").length;
+                                                                        invoiceItem.service_headers = $("#serviceHeaders").html();
+                                                                        invoiceItem.service_rows = $("#serviceRows").html();
+                                                                        invoiceItem.service_rows_count = $("#serviceRows tr").length;
                                                                         $.post("api/process-data",
                                                                         {
                                                                             image_name: imagename,
@@ -131,7 +132,13 @@
                                                                             invoice: JSON.stringify(invoiceItem)
                                                                         },
                                                                         function(data, status){
-                                                                            window.location = '/dashboard';
+                                                                            $("#initiateWorkflowModal").modal('hide');
+                                                                            bootbox.alert({
+                                                                                message: "Invoice posted successfully",
+                                                                                callback: function () {
+                                                                                    window.location = '/dashboard';
+                                                                                }
+                                                                            });
                                                                         });
                                                                     }
                                                                 }

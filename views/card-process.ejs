@@ -51,6 +51,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
     <script src="js/bootstrap-waitingfor.min.js"></script>
     <script src="js/mindmup-editabletable.js"></script>
+    <script src="lib/bootbox/bootbox.min.js"></script>
     <script>
             $(function() {
                 //$("#complete_data").attr("disabled", "disabled");
@@ -197,6 +198,7 @@
                         }
                         $("#currency").val(data.invoice.currency);
                         $("#currency").addClass('is-valid');
+
                         $("#poOrderNumber").val(data.invoice.po_order_number);
                         $("#deliveryNote").val(data.invoice.delivery_note);
                         $("#materialHeaders").html(data.invoice.material_headers);
@@ -217,21 +219,30 @@
                             $('#service-tab').attr("disabled", false);
                         }
 
-                        if(imagename == 'invoice1.jpg'){
+                        
                             $.getJSON( "/invoices.json", function( invoices ) {
                                 for(var i = 0; i < invoices.length; i++) { 
                                     if(invoices[i].file === imagename) {
-                                        $("#grossValue").val(invoices[i].gross_value);
-                                        if(data.invoice.buyer !== "") {
-                                            $("#grossValue").addClass('is-valid');
-                                        } else {
-                                            $("#grossValue").addClass('is-invalid');
+
+                                        if(invoices[i].po_order_number !== invoices[i].sap_po_number){
+                                            $("#poOrderNumber").addClass('is-invalid');
+                                            $("#poOrderNumber").removeClass('is-valid');
                                         }
-                                       // waitingDialog.hide();
+
+                                        if(imagename == 'invoice1.jpg'){
+                                            $("#grossValue").val(invoices[i].gross_value);
+                                            if(invoices[i].gross_value !== "") {
+                                                $("#grossValue").addClass('is-valid');
+                                                $("#grossValue").removeClass('is-invalid');
+                                            } else {
+                                                $("#grossValue").addClass('is-invalid');
+                                                $("#grossValue").removeClass('is-valid');
+                                            }
+                                        }
                                     }
                                 }
                             });
-                        }
+                        
 
                         //$("#complete_data").removeAttr("disabled");
                         
@@ -259,7 +270,7 @@
                             sap_po_number: "",
                             vendor_code: "",
                             discount: "",
-                            is_error: false,
+                            is_error: true,
                             material_headers: "",
                             material_rows: "",
                             material_rows_count: "",
@@ -292,8 +303,14 @@
                                     },
                                     function(data, status){
                                         waitingDialog.hide();
-                                        alert('Invoice not formatted properly, moved to error list');
-                                        window.location = '/dashboard';
+                                        //alert('Invoice not formatted properly, moved to error list');
+                                        bootbox.alert({
+                                            message: "Invoice contains errors and has been moved error folder",
+                                            callback: function () {
+                                                window.location = '/dashboard';
+                                            }
+                                        });
+                                        //window.location = '/dashboard';
                                     });
                                 }
                             }
