@@ -343,8 +343,13 @@
                 <label for="currency" class="col-sm-6 col-form-label">Currency</label>
                 <div class="col-sm-6">
                     <select class="form-control <%= (invoiceItem.id === '') ? '' : (invoiceItem.currency !== '' && invoiceItem.id !== '') ? 'is-valid' : 'is-invalid' %>" id="currency" disabled>
-                        <option value="INR">INR</option>
-                        <option value="EUR">EUR</option>
+                        <% if(invoiceItem.currency == 'INR') { %> 
+                            <option selected="selected" value="INR">INR</option>
+                            <option value="EUR">EUR</option>   
+                        <% } else if(invoiceItem.currency == 'EUR') { %>
+                            <option value="INR">INR</option>
+                            <option selected="selected" value="EUR">EUR</option>
+                        <% }  %>
                     </select>
                 </div>
             </div>
@@ -352,8 +357,13 @@
                 <label for="currencyService" class="col-sm-6 col-form-label">Currency</label>
                 <div class="col-sm-6">
                     <select class="form-control <%= (invoiceItem.id === '') ? '' : (invoiceItem.currency_service !== '' && invoiceItem.id !== '') ? 'is-valid' : 'is-invalid' %>" id="currencyService" disabled>
-                        <option value="INR">INR</option>
-                        <option value="EUR">EUR</option>
+                        <% if(invoiceItem.currency_service == 'INR') { %> 
+                            <option selected="selected" value="INR">INR</option>
+                            <option value="EUR">EUR</option>   
+                        <% } else if(invoiceItem.currency_service == 'EUR') { %>
+                            <option value="INR">INR</option>
+                            <option selected="selected" value="EUR">EUR</option>
+                        <% }  %>
                     </select>
                 </div>
             </div>
