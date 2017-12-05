@@ -7,7 +7,7 @@
                         <div id="invoice-header-container" class="card-header d-flex justify-content-between">
                             <p class="card-header-title"><strong><%= fileName %></strong></p>
                                 <div class=''>
-                                    <% if(invoiceType !== 'processed') { %>
+                                    <% if(invoiceType !== 'Processed_Invoices') { %>
                                         <button type="button" id="go_button" data-imagesrc="<%= invoiceType %>/<%= fileName %>" data-imagename="<%= fileName %>" class="btn btn-sm btn-primary mr-1">Read</button> 
                                         <button type="button"  id="complete_data" data-toggle="modal" data-invoicetype="<%= invoiceType %>" class="btn btn-sm btn-primary">Complete Data</button>
                                      <% } %>   
@@ -22,32 +22,69 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form>
-                                                        <div class="form-group row">
-                                                            <label for="financeMaterial" class="col-sm-6 col-form-label">Finance / Material</label>
-                                                            <div class="col-sm-6">
-                                                                <input type="text" readonly class="form-control-plaintext" id="financeMaterial" value="<%= invoiceItem.financeMaterial %>">
+                                                        <ul class="nav nav-tabs" id="mySapTab" role="tablist">
+                                                            <li class="nav-item">
+                                                                <% if(invoiceItem.material_rows_count > 0) { %>
+                                                                    <button type="button" class="nav-link" id="material-sap-tab" data-toggle="tab" href="#material-sap" role="tab" aria-controls="material-sap" aria-selected="true">Materials</button>
+                                                                <% } else { %>
+                                                                    <button type="button" disabled class="nav-link" id="material-sap-tab" data-toggle="tab" href="#material-sap" role="tab" aria-controls="material-sap" aria-selected="true">Materials</button>
+                                                                <% } %>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <% if(invoiceItem.service_rows_count > 0) { %>
+                                                                    <button class="nav-link ml-1" id="service-sap-tab" data-toggle="tab" href="#service-sap" role="tab" aria-controls="service-sap" aria-selected="false">Services</button>
+                                                                <% } else { %>
+                                                                    <button class="nav-link ml-1" disabled id="service-sap-tab" data-toggle="tab" href="#service-sap" role="tab" aria-controls="service-sap" aria-selected="false">Services</button>
+                                                                <% } %>
+                                                            </li>
+                                                        </ul>
+
+                                                        <div class="tab-content" id="mySapTabContent">
+                                                            <div class="tab-pane fade show active" id="material-sap" role="tabpanel" aria-labelledby="material-sap-tab">
+                                                                <form>
+                                                                    <div class="form-group row">
+                                                                        <label for="financeMaterial" class="col-sm-6 col-form-label">Finance / Material</label>
+                                                                        <div class="col-sm-6">
+                                                                            <input type="text" readonly class="form-control-plaintext" id="financeMaterial" value="">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label for="sapPoNumber" class="col-sm-6 col-form-label">SAP PO Number</label>
+                                                                        <div class="col-sm-6">
+                                                                            <input type="text" readonly class="form-control-plaintext" id="sapPoNumber" value="">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label for="vendorCode" class="col-sm-6 col-form-label">Vendor Code</label>
+                                                                        <div class="col-sm-6">
+                                                                            <input type="text" readonly class="form-control-plaintext" id="vendorCode" value="">
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <div class="tab-pane fade" id="service-sap" role="tabpanel" aria-labelledby="service-sap-tab">
+                                                                <form>
+                                                                    <div class="form-group row">
+                                                                        <label for="financeMaterialService" class="col-sm-6 col-form-label">Finance / Material</label>
+                                                                        <div class="col-sm-6">
+                                                                            <input type="text" readonly class="form-control-plaintext" id="financeMaterialService" value="">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label for="sapPoNumberService" class="col-sm-6 col-form-label">SAP PO Number</label>
+                                                                        <div class="col-sm-6">
+                                                                            <input type="text" readonly class="form-control-plaintext" id="sapPoNumberService" value="">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label for="vendorCodeService" class="col-sm-6 col-form-label">Vendor Code</label>
+                                                                        <div class="col-sm-6">
+                                                                            <input type="text" readonly class="form-control-plaintext" id="vendorCodeService" value="">
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group row">
-                                                            <label for="sapPoNumber" class="col-sm-6 col-form-label">SAP PO Number</label>
-                                                            <div class="col-sm-6">
-                                                                <input type="text" readonly class="form-control-plaintext" id="sapPoNumber" value="<%= invoiceItem.sapPoNumber %>">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label for="vendorCode" class="col-sm-6 col-form-label">Vendor Code</label>
-                                                            <div class="col-sm-6">
-                                                                <input type="text" readonly class="form-control-plaintext" id="vendorCode" value="<%= invoiceItem.vendorCode %>">
-                                                            </div>
-                                                        </div>
-                                                        <!--<div class="form-group row">
-                                                            <label for="discount" class="col-sm-6 col-form-label">Discount</label>
-                                                            <div class="col-sm-6">
-                                                                <input type="text" readonly class="form-control-plaintext" id="discount" value="<%= invoiceItem.discount %>">
-                                                            </div>
-                                                        </div>-->
-                                                    </form>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -69,12 +106,30 @@
                                                                 gst_value: $("#gstValue").val(),
                                                                 gross_value: $("#grossValue").val(),
                                                                 currency: $("#currency").val(),
-                                                                po_order_number: $("#poOrderNumber").val(),
                                                                 delivery_note: $("#deliveryNote").val(),
                                                                 finance_material: "",
                                                                 sap_po_number: "",
                                                                 vendor_code: "",
                                                                 discount: "",
+
+
+                                                                buyer_service: $("#buyerService").val(),
+                                                                supplier_service: $("#supplierService").val(),
+                                                                debit_credit_service: $("#debitCreditService").val(),
+                                                                invoice_number_service: $("#invoiceNumberService").val(),
+                                                                invoice_date_service: $("#invoiceDateService").val(),
+                                                                net_value_service: $("#netValueService").val(),
+                                                                gst_value_service: $("#gstValueService").val(),
+                                                                gross_value_service: $("#grossValueService").val(),
+                                                                currency_service: $("#currencyService").val(),
+                                                                po_order_number_service: $("#poOrderNumberService").val(),
+                                                                delivery_note_service: $("#deliveryNoteService").val(),
+                                                                finance_material_service: "",
+                                                                sap_po_number_service: "",
+                                                                vendor_code_service: "",
+                                                                discount_service: "",
+
+
                                                                 is_error: false,
                                                                 material_headers: "",
                                                                 material_rows: "",
@@ -85,39 +140,23 @@
                                                             }
                                                             $.getJSON( "/invoices.json", function( invoices ) {
                                                                 for(var i = 0; i < invoices.length; i++) { 
-                                                                    /*if(invoices[i].file === imagename && invoices[i].is_error) {
-                                                                        invoiceItem.id = invoices[i].id;
-                                                                        invoiceItem.file = invoices[i].file;
-                                                                        invoiceItem.finance_material = invoices[i].finance_material;
-                                                                        invoiceItem.sap_po_number = invoices[i].sap_po_number;
-                                                                        invoiceItem.vendor_code = invoices[i].vendor_code;
-                                                                        invoiceItem.discount = invoices[i].discount;
-                                                                        invoiceItem.material_headers = invoices[i].material_headers;
-                                                                        invoiceItem.material_rows = invoices[i].material_rows;
-                                                                        invoiceItem.material_rows_count = invoices[i].material_rows_count;
-                                                                        invoiceItem.service_headers = invoices[i].service_headers;
-                                                                        invoiceItem.service_rows = invoices[i].service_rows;
-                                                                        invoiceItem.service_rows_count = invoices[i].service_rows_count;
-                                                                        $.post("api/process-data",
-                                                                        {
-                                                                            image_name: imagename,
-                                                                            isError: invoices[i].is_error,
-                                                                            invoiceType: invoiceType,
-                                                                            invoice: invoiceItem
-                                                                        },
-                                                                        function(data, status){
-                                                                            alert('Invoice not formatted properly, moved to error list');
-                                                                            window.location = '/dashboard';
-                                                                        });
-                                                                    } else*/ 
-                                                                    
                                                                     if(invoices[i].file === imagename) {
                                                                         invoiceItem.id = invoices[i].id;
+                                                                        invoiceItem.unique_number = invoices[i].unique_number;
                                                                         invoiceItem.file = invoices[i].file;
                                                                         invoiceItem.finance_material = invoices[i].finance_material;
+                                                                        invoiceItem.po_order_number = invoices[i].sap_po_number,
                                                                         invoiceItem.sap_po_number = invoices[i].sap_po_number;
                                                                         invoiceItem.vendor_code = invoices[i].vendor_code;
                                                                         invoiceItem.discount = invoices[i].discount;
+
+
+                                                                        invoiceItem.finance_material_service = invoices[i].finance_material_service;
+                                                                        invoiceItem.sap_po_number_service = invoices[i].sap_po_number_service;
+                                                                        invoiceItem.vendor_code_service = invoices[i].vendor_code_service;
+                                                                        invoiceItem.discount_service = invoices[i].discount_service;
+
+
                                                                         invoiceItem.material_headers = $("#materialHeaders").html();
                                                                         invoiceItem.material_rows = $("#materialRows").html();
                                                                         invoiceItem.material_rows_count = $("#materialRows tr").length;
@@ -127,7 +166,7 @@
                                                                         $.post("api/process-data",
                                                                         {
                                                                             image_name: imagename,
-                                                                            isError: invoices[i].is_error,
+                                                                            isError: false,
                                                                             invoiceType: invoiceType,
                                                                             invoice: JSON.stringify(invoiceItem)
                                                                         },
@@ -193,24 +232,36 @@
 
         <form id="process-invoice-form" class="col-4 mt-2">
             <div class="d-flex justify-content-end">
-                <% if (invoiceType === 'error_invoices') { %>
+                <% if (invoiceType === 'Error_Invoices') { %>
                     <button type="button" id="edit_button" class="btn btn-sm btn-primary">Edit</button>
                     <button type="button" id="save_button" class="btn btn-sm btn-primary">Save changes</button>
                 <% } %>
             </div>
-            <div class="form-group row">
+            <div class="form-group row material-form-row">
                 <label for="supplier" class="col-sm-12 col-form-label">Supplier</label>
                 <div class="col-sm-12">
                     <input type="text" class="form-control <%= (invoiceItem.id === '') ? '' : (invoiceItem.supplier !== '' && invoiceItem.id !== '') ? 'is-valid' : 'is-invalid' %>" id="supplier" disabled value="<%= invoiceItem.supplier %>">
                 </div>
             </div>
-            <div class="form-group row">
+            <div class="form-group row service-form-row">
+                <label for="supplierService" class="col-sm-12 col-form-label">Supplier</label>
+                <div class="col-sm-12">
+                    <input type="text" class="form-control <%= (invoiceItem.id === '') ? '' : (invoiceItem.supplier_service !== '' && invoiceItem.id !== '') ? 'is-valid' : 'is-invalid' %>" id="supplierService" disabled value="<%= invoiceItem.supplier_service %>">
+                </div>
+            </div>
+            <div class="form-group row material-form-row">
                 <label for="buyer" class="col-sm-12 col-form-label">Buyer</label>
                 <div class="col-sm-12">
                     <input type="text" class="form-control <%= (invoiceItem.id === '') ? '' : (invoiceItem.buyer !== '' && invoiceItem.id !== '') ? 'is-valid' : 'is-invalid' %>" id="buyer" disabled value="<%= invoiceItem.buyer %>">
                 </div>
             </div>
-            <div class="form-group row">
+            <div class="form-group row service-form-row">
+                <label for="buyerService" class="col-sm-12 col-form-label">Buyer</label>
+                <div class="col-sm-12">
+                    <input type="text" class="form-control <%= (invoiceItem.id === '') ? '' : (invoiceItem.buyer_service !== '' && invoiceItem.id !== '') ? 'is-valid' : 'is-invalid' %>" id="buyerService" disabled value="<%= invoiceItem.buyer_service %>">
+                </div>
+            </div>
+            <div class="form-group row material-form-row">
                 <label for="debitCredit" class="col-sm-6 col-form-label">Debit/Credit</label>
                 <div class="col-sm-6">
                     <select class="form-control <%= (invoiceItem.id === '') ? '' : (invoiceItem.debit_credit !== '' && invoiceItem.id !== '') ? 'is-valid' : 'is-invalid' %>" id="debitCredit" disabled>
@@ -219,37 +270,76 @@
                     </select>
                 </div>
             </div>
-            <div class="form-group row">
+            <div class="form-group row service-form-row">
+                <label for="debitCreditService" class="col-sm-6 col-form-label">Debit/Credit</label>
+                <div class="col-sm-6">
+                    <select class="form-control <%= (invoiceItem.id === '') ? '' : (invoiceItem.debit_credit_service !== '' && invoiceItem.id !== '') ? 'is-valid' : 'is-invalid' %>" id="debitCreditService" disabled>
+                        <option value="Debit">Debit</option>
+                        <option value="Credit">Credit</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row material-form-row">
                 <label for="invoiceNumber" class="col-sm-6 col-form-label">Invoice Number</label>
                 <div class="col-sm-6">
                     <input type="text" class="form-control <%= (invoiceItem.id === '') ? '' : (invoiceItem.invoice_number !== '' && invoiceItem.id !== '') ? 'is-valid' : 'is-invalid' %>" id="invoiceNumber" disabled value="<%= invoiceItem.invoice_number %>">
                 </div>
             </div>
-            <div class="form-group row">
+            <div class="form-group row service-form-row">
+                <label for="invoiceNumberService" class="col-sm-6 col-form-label">Invoice Number</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control <%= (invoiceItem.id === '') ? '' : (invoiceItem.invoice_number_service !== '' && invoiceItem.id !== '') ? 'is-valid' : 'is-invalid' %>" id="invoiceNumberService" disabled value="<%= invoiceItem.invoice_number_service %>">
+                </div>
+            </div>
+            <div class="form-group row material-form-row">
                 <label for="invoiceDate" class="col-sm-6 col-form-label">Invoice Date</label>
                 <div class="col-sm-6">
                     <input type="text" class="form-control <%= (invoiceItem.id === '') ? '' : (invoiceItem.invoice_date !== '' && invoiceItem.id !== '') ? 'is-valid' : 'is-invalid' %>" id="invoiceDate" disabled value="<%= invoiceItem.invoice_date %>">
                 </div>
             </div>
-            <div class="form-group row">
+            <div class="form-group row service-form-row">
+                <label for="invoiceDateService" class="col-sm-6 col-form-label">Invoice Date</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control <%= (invoiceItem.id === '') ? '' : (invoiceItem.invoice_date_service !== '' && invoiceItem.id !== '') ? 'is-valid' : 'is-invalid' %>" id="invoiceDateService" disabled value="<%= invoiceItem.invoice_date_service %>">
+                </div>
+            </div>
+            <div class="form-group row material-form-row">
                 <label for="netValue" class="col-sm-6 col-form-label">Net Value</label>
                 <div class="col-sm-6">
                     <input type="text" class="form-control <%= (invoiceItem.id === '') ? '' : (invoiceItem.net_value !== '' && invoiceItem.id !== '') ? 'is-valid' : 'is-invalid' %>" id="netValue" disabled value="<%= invoiceItem.net_value %>">
                 </div>
             </div>
-            <div class="form-group row">
+            <div class="form-group row service-form-row">
+                <label for="netValueService" class="col-sm-6 col-form-label">Net Value</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control <%= (invoiceItem.id === '') ? '' : (invoiceItem.net_value_service !== '' && invoiceItem.id !== '') ? 'is-valid' : 'is-invalid' %>" id="netValueService" disabled value="<%= invoiceItem.net_value_service %>">
+                </div>
+            </div>
+            <div class="form-group row material-form-row">
                 <label for="gstValue" class="col-sm-6 col-form-label">GST Value</label>
                 <div class="col-sm-6">
                     <input type="text" class="form-control <%= (invoiceItem.id === '') ? '' : (invoiceItem.gst_value !== '' && invoiceItem.id !== '') ? 'is-valid' : 'is-invalid' %>" id="gstValue" disabled value="<%= invoiceItem.gst_value %>">
                 </div>
             </div>
-            <div class="form-group row">
+            <div class="form-group row service-form-row">
+                <label for="gstValueService" class="col-sm-6 col-form-label">GST Value</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control <%= (invoiceItem.id === '') ? '' : (invoiceItem.gst_value_service !== '' && invoiceItem.id !== '') ? 'is-valid' : 'is-invalid' %>" id="gstValueService" disabled value="<%= invoiceItem.gst_value_service %>">
+                </div>
+            </div>
+            <div class="form-group row material-form-row">
                 <label for="grossValue" class="col-sm-6 col-form-label">Gross Value</label>
                 <div class="col-sm-6">
                     <input type="text" class="form-control <%= (invoiceItem.id === '') ? '' : (invoiceItem.gross_value !== '' && invoiceItem.id !== '') ? 'is-valid' : 'is-invalid' %>" id="grossValue" disabled value="<%= invoiceItem.gross_value %>">
                 </div>
             </div>
-            <div class="form-group row">
+            <div class="form-group row service-form-row">
+                <label for="grossValueService" class="col-sm-6 col-form-label">Gross Value</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control <%= (invoiceItem.id === '') ? '' : (invoiceItem.gross_value_service !== '' && invoiceItem.id !== '') ? 'is-valid' : 'is-invalid' %>" id="grossValueService" disabled value="<%= invoiceItem.gross_value_service %>">
+                </div>
+            </div>
+            <div class="form-group row material-form-row">
                 <label for="currency" class="col-sm-6 col-form-label">Currency</label>
                 <div class="col-sm-6">
                     <select class="form-control <%= (invoiceItem.id === '') ? '' : (invoiceItem.currency !== '' && invoiceItem.id !== '') ? 'is-valid' : 'is-invalid' %>" id="currency" disabled>
@@ -258,16 +348,37 @@
                     </select>
                 </div>
             </div>
-            <div class="form-group row">
+            <div class="form-group row service-form-row">
+                <label for="currencyService" class="col-sm-6 col-form-label">Currency</label>
+                <div class="col-sm-6">
+                    <select class="form-control <%= (invoiceItem.id === '') ? '' : (invoiceItem.currency_service !== '' && invoiceItem.id !== '') ? 'is-valid' : 'is-invalid' %>" id="currencyService" disabled>
+                        <option value="INR">INR</option>
+                        <option value="EUR">EUR</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row material-form-row">
                 <label for="poOrderNumber" class="col-sm-6 col-form-label">PO Order Number</label>
                 <div class="col-sm-6">
                     <input type="text" class="form-control" id="poOrderNumber" disabled value="<%= invoiceItem.po_order_number %>">
                 </div>
             </div>
-            <div class="form-group row">
+            <div class="form-group row service-form-row">
+                <label for="poOrderNumberService" class="col-sm-6 col-form-label">PO Order Number</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="poOrderNumberService" disabled value="<%= invoiceItem.po_order_number_service %>">
+                </div>
+            </div>
+            <div class="form-group row material-form-row">
                 <label for="deliveryNote" class="col-sm-6 col-form-label">Delivery Note</label>
                 <div class="col-sm-6">
                     <input type="text" class="form-control" id="deliveryNote" disabled value="<%= invoiceItem.delivery_note %>">
+                </div>
+            </div>
+            <div class="form-group row service-form-row">
+                <label for="deliveryNoteService" class="col-sm-6 col-form-label">Delivery Note</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="deliveryNoteService" disabled value="<%= invoiceItem.delivery_note_service %>">
                 </div>
             </div>
         </form>
@@ -293,7 +404,7 @@
                         </li>
                     </ul>
                     <div class="ml-auto">
-                        <% if (invoiceType === 'error_invoices') { %>
+                        <% if (invoiceType === 'Error_Invoices') { %>
                             <!--<button type="button" id="add_line_item_button" class="btn btn-sm btn-primary">Add Line Item</button>-->
                         <% } %>
                         <% if(invoiceItem.material_rows_count > 0 || invoiceItem.service_rows_count > 0) { %>
@@ -340,6 +451,9 @@
 
 
     <style>
+        /*.service-form-row {
+            display: none;
+        }*/
         p.card-header-title {
             line-height: 2rem;
             margin: 0;
@@ -389,13 +503,14 @@
         .modal .form-control-plaintext {
             font-size: 1rem;
             font-weight: bold;
+            color: #007E33;
         }
 
         #save_button {
             display: none;
         }
 
-        #accordion {
+        #accordion, #sap-modal-panel {
             position: fixed;
             bottom: 30px;
             border-radius:none !important;

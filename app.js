@@ -6,9 +6,9 @@ var fs = require('fs');
 var factory = require('./factory');
 var pdf2png = require('pdf2png');
 const ejsLint = require('ejs-lint');
-const unProcessedParentPath = 'C:/invoices/unprocessed/';
-const processedParentPath = 'C:/invoices/processed/';
-const errorInvoicesParentPath = 'C:/invoices/error_invoices/';
+const unProcessedParentPath = 'C:/invoices/Unprocessed_Invoices/';
+const processedParentPath = 'C:/invoices/Processed_Invoices/';
+const errorInvoicesParentPath = 'C:/invoices/Error_Invoices/';
 
 
 
@@ -44,10 +44,10 @@ if(!fs.existsSync(unProcessedParentPath)) {
     fs.mkdirSync(unProcessedParentPath);
 }
 
-if(!fs.existsSync('public/unprocessed/')) {
-    fs.mkdirSync('public/unprocessed/');
+if(!fs.existsSync('public/Unprocessed_Invoices/')) {
+    fs.mkdirSync('public/Unprocessed_Invoices/');
 } else {
-    factory._deleteInvoices('public/unprocessed/');
+    factory._deleteInvoices('public/Unprocessed_Invoices/');
 }
 
 var unprocessedInvoices = factory._getInvoices(unProcessedParentPath);
@@ -97,7 +97,7 @@ for(var i = 0; i < unprocessedInvoices.length; i++) {
         });
     } else {*/
         var inStr = fs.createReadStream(unProcessedParentPath + unprocessedInvoices[i].fileName);
-        var outStr = fs.createWriteStream('public/unprocessed/' + unprocessedInvoices[i].fileName);
+        var outStr = fs.createWriteStream('public/Unprocessed_Invoices/' + unprocessedInvoices[i].fileName);
         inStr.pipe(outStr);
     /*}*/
 
@@ -108,16 +108,16 @@ if(!fs.existsSync(processedParentPath)) {
     fs.mkdirSync(processedParentPath);
 }
 
-if(!fs.existsSync('public/processed/')) {
-    fs.mkdirSync('public/processed/');
+if(!fs.existsSync('public/Processed_Invoices/')) {
+    fs.mkdirSync('public/Processed_Invoices/');
 } else {
-    factory._deleteInvoices('public/processed/');
+    factory._deleteInvoices('public/Processed_Invoices/');
 }
 
 var processedInvoices = factory._getInvoices(processedParentPath);
 for(var i = 0; i < processedInvoices.length; i++) {
     var inStr = fs.createReadStream(processedParentPath + processedInvoices[i].fileName);
-    var outStr = fs.createWriteStream('public/processed/' + processedInvoices[i].fileName);
+    var outStr = fs.createWriteStream('public/Processed_Invoices/' + processedInvoices[i].fileName);
     inStr.pipe(outStr);
 }
 
@@ -125,16 +125,16 @@ if(!fs.existsSync(errorInvoicesParentPath)) {
     fs.mkdirSync(errorInvoicesParentPath);
 }
 
-if(!fs.existsSync('public/error_invoices/')) {
-    fs.mkdirSync('public/error_invoices/');
+if(!fs.existsSync('public/Error_Invoices/')) {
+    fs.mkdirSync('public/Error_Invoices/');
 } else {
-    factory._deleteInvoices('public/error_invoices/');
+    factory._deleteInvoices('public/Error_Invoices/');
 }
 
 var errorInvoices = factory._getInvoices(errorInvoicesParentPath);
 for(var i = 0; i < errorInvoices.length; i++) {
     var inStr = fs.createReadStream(errorInvoicesParentPath + errorInvoices[i].fileName);
-    var outStr = fs.createWriteStream('public/error_invoices/' + errorInvoices[i].fileName);
+    var outStr = fs.createWriteStream('public/Error_Invoices/' + errorInvoices[i].fileName);
     inStr.pipe(outStr);
 }
 

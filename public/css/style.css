@@ -2,21 +2,8 @@ body, html {
     height: 100%;
 }
 
-body { 
-    /* The image used */
-    /*background-image: url('../images/background.jpg');
-
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;*/
-    /*height: 100%;*/
-    /*background: rgb(53,106,160); 
-    background: -moz-linear-gradient(top, rgba(53,106,160,1) 0%, rgba(53,106,160,1) 100%); 
-    background: -webkit-linear-gradient(top, rgba(53,106,160,1) 0%,rgba(53,106,160,1) 100%); 
-    background: linear-gradient(to bottom, rgba(53,106,160,1) 0%,rgba(53,106,160,1) 100%); 
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#356aa0', endColorstr='#356aa0',GradientType=0 ); */
+body {
     background-color: #efefef;
-    
 }
 
 .bg-custom {
@@ -34,4 +21,17 @@ body {
 
 main {
     padding: 4rem 1rem 0 2rem;
+}
+
+a.navbar-brand {
+    font-size: 1.5rem;
+}
+
+a.navbar-brand strong {
+    font-size: 1.8rem;
+    color: #5E4230;
+}
+
+.dashboard-header {
+    border-bottom: 2px solid #3299BB;
 }

@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     
-    <title>Automated Digital Invoice Management</title>
+    <title>Automated Invoice Management</title>
 
     <!-- Bootstrap core CSS -->
     <link href="lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -54,9 +54,174 @@
     <script src="lib/bootbox/bootbox.min.js"></script>
     <script>
             $(function() {
+
                 //$("#complete_data").attr("disabled", "disabled");
                 //$("#process-invoice-form").find('.form-control').attr("disabled", true);
-            
+                $(".service-form-row").hide();
+                $("#material-tab" ).click(function() {
+                    
+                    var imagename = $("#imageToProcess").data().imagename;   
+                    $.getJSON( "/invoices.json", function( invoices ) {
+                        for(var i = 0; i < invoices.length; i++) { 
+                            if(invoices[i].file === imagename) {
+                                $("#buyer").val(invoices[i].buyer);
+                                if(invoices[i].buyer !== "") {
+                                    $("#buyer").addClass('is-valid');
+                                    $("#buyer").removeClass('is-invalid');
+                                } else {
+                                    $("#buyer").addClass('is-invalid');
+                                    $("#buyer").removeClass('is-valid');
+                                }
+                                
+                                $("#supplier").val(invoices[i].supplier);
+                                if(invoices[i].supplier !== "") {
+                                    $("#supplier").addClass('is-valid');
+                                    $("#supplier").removeClass('is-invalid');
+                                } else {
+                                    $("#supplier").addClass('is-invalid');
+                                    $("#buyer").removeClass('is-valid');
+                                }
+    
+                                $("#debitCredit").val(invoices[i].debit_credit);
+                                $("#debitCredit").addClass('is-valid');
+                                $("#invoiceNumber").val(invoices[i].invoice_number);
+                                if(invoices[i].invoice_number !== "") {
+                                    $("#invoiceNumber").addClass('is-valid');
+                                    $("#invoiceNumber").removeClass('is-invalid');
+                                } else {
+                                    $("#invoiceNumber").addClass('is-invalid');
+                                    $("#invoiceNumber").removeClass('is-valid');
+                                }
+                                $("#invoiceDate").val(invoices[i].invoice_date);
+                                if(invoices[i].invoice_date !== "") {
+                                    $("#invoiceDate").addClass('is-valid');
+                                    $("#invoiceDate").removeClass('is-invalid');
+                                } else {
+                                    $("#invoiceDate").addClass('is-invalid');
+                                    $("#invoiceDate").removeClass('is-valid');
+                                }
+                                $("#netValue").val(invoices[i].net_value);
+                                if(invoices[i].net_value !== "") {
+                                    $("#netValue").addClass('is-valid');
+                                    $("#netValue").removeClass('is-invalid');
+                                } else {
+                                    $("#netValue").addClass('is-invalid');
+                                    $("#netValue").removeClass('is-valid');
+                                }
+                                $("#gstValue").val(invoices[i].gst_value);
+                                if(invoices[i].gst_value !== "") {
+                                    $("#gstValue").addClass('is-valid');
+                                    $("#gstValue").removeClass('is-invalid');
+                                } else {
+                                    $("#gstValue").addClass('is-invalid');
+                                    $("#gstValue").removeClass('is-valid');
+                                }
+                                $("#grossValue").val(invoices[i].gross_value);
+                                if(invoices[i].gross_value !== "") {
+                                    $("#grossValue").addClass('is-valid');
+                                    $("#grossValue").removeClass('is-invalid');
+                                } else {
+                                    $("#grossValue").addClass('is-invalid');
+                                    $("#grossValue").removeClass('is-valid');
+                                }
+                                $("#currency").val(invoices[i].currency);
+                                $("#currency").addClass('is-valid');
+    
+                                $("#poOrderNumber").val(invoices[i].po_order_number);
+                                $("#deliveryNote").val(invoices[i].delivery_note);
+                            }
+                        }
+                    });
+                    
+                    
+                    $(".material-form-row").show();
+                    $(".service-form-row").hide();
+
+
+
+
+                });
+
+                $("#service-tab" ).click(function() {
+                    var imagename = $("#imageToProcess").data().imagename;   
+                    $.getJSON( "/invoices.json", function( invoices ) {
+                        for(var i = 0; i < invoices.length; i++) { 
+                            if(invoices[i].file === imagename) {
+                                $("#buyerService").val(invoices[i].buyer_service);
+                                if(invoices[i].buyer_service !== "") {
+                                    $("#buyerService").addClass('is-valid');
+                                    $("#buyerService").removeClass('is-invalid');
+                                } else {
+                                    $("#buyerService").addClass('is-invalid');
+                                    $("#buyerService").removeClass('is-valid');
+                                }
+                                
+                                $("#supplierService").val(invoices[i].supplier_service);
+                                if(invoices[i].supplier_service !== "") {
+                                    $("#supplierService").addClass('is-valid');
+                                    $("#supplierService").removeClass('is-invalid');
+                                } else {
+                                    $("#supplierService").addClass('is-invalid');
+                                    $("#buyerService").removeClass('is-valid');
+                                }
+
+                                $("#debitCreditService").val(invoices[i].debit_credit_service);
+                                $("#debitCreditService").addClass('is-valid');
+                                $("#invoiceNumberService").val(invoices[i].invoice_number_service);
+                                if(invoices[i].invoice_number_service !== "") {
+                                    $("#invoiceNumberService").addClass('is-valid');
+                                    $("#invoiceNumberService").removeClass('is-invalid');
+                                } else {
+                                    $("#invoiceNumberService").addClass('is-invalid');
+                                    $("#invoiceNumberService").removeClass('is-valid');
+                                }
+                                $("#invoiceDateService").val(invoices[i].invoice_date_service);
+                                if(invoices[i].invoice_date_service !== "") {
+                                    $("#invoiceDateService").addClass('is-valid');
+                                    $("#invoiceDateService").removeClass('is-invalid');
+                                } else {
+                                    $("#invoiceDateService").addClass('is-invalid');
+                                    $("#invoiceDateService").removeClass('is-valid');
+                                }
+                                $("#netValueService").val(invoices[i].net_value_service);
+                                if(invoices[i].net_value_service !== "") {
+                                    $("#netValueService").addClass('is-valid');
+                                    $("#netValueService").removeClass('is-invalid');
+                                } else {
+                                    $("#netValueService").addClass('is-invalid');
+                                    $("#netValueService").removeClass('is-valid');
+                                }
+                                $("#gstValueService").val(invoices[i].gst_value_service);
+                                if(invoices[i].gst_value_service !== "") {
+                                    $("#gstValueService").addClass('is-valid');
+                                    $("#gstValueService").removeClass('is-invalid');
+                                } else {
+                                    $("#gstValueService").addClass('is-invalid');
+                                    $("#gstValueService").removeClass('is-valid');
+                                }
+                                $("#grossValueService").val(invoices[i].gross_value_service);
+                                if(invoices[i].gross_value_service !== "") {
+                                    $("#grossValueService").addClass('is-valid');
+                                    $("#grossValueService").removeClass('is-invalid');
+                                } else {
+                                    $("#grossValueService").addClass('is-invalid');
+                                    $("#grossValueService").removeClass('is-valid');
+                                }
+                                $("#currencyService").val(invoices[i].currency_service);
+                                $("#currencyService").addClass('is-valid');
+
+                                $("#poOrderNumberService").val(invoices[i].po_order_number_service);
+                                $("#deliveryNoteService").val(invoices[i].delivery_note_service);
+                            }
+                        }
+                    });
+
+
+                    $(".material-form-row").hide();
+                    $(".service-form-row").show();
+                });
+
+
             function runOCR(url) {
                 Tesseract.recognize(url)
                     .then(function(result) {
@@ -122,7 +287,7 @@
                     waitingDialog.show('Reading text from invoice...');
                     setTimeout(function () {
                     waitingDialog.hide();
-                    }, 2000);
+                    }, 600);
                 } else {
                     waitingDialog.show('Reading text from invoice...');
                 }
@@ -136,71 +301,18 @@
                 },
                 function(data, status){
                     if(data.invoice) {
-                        $("#buyer").val(data.invoice.buyer);
-                        if(data.invoice.buyer !== "") {
-                            $("#buyer").addClass('is-valid');
-                            $("#buyer").removeClass('is-invalid');
-                        } else {
-                            $("#buyer").addClass('is-invalid');
-                            $("#buyer").removeClass('is-valid');
-                        }
                         
-                        $("#supplier").val(data.invoice.supplier);
-                        if(data.invoice.supplier !== "") {
-                            $("#supplier").addClass('is-valid');
-                            $("#supplier").removeClass('is-invalid');
-                        } else {
-                            $("#supplier").addClass('is-invalid');
-                            $("#buyer").removeClass('is-valid');
-                        }
 
-                        $("#debitCredit").val(data.invoice.debit_credit);
-                        $("#debitCredit").addClass('is-valid');
-                        $("#invoiceNumber").val(data.invoice.invoice_number);
-                        if(data.invoice.invoice_number !== "") {
-                            $("#invoiceNumber").addClass('is-valid');
-                            $("#invoiceNumber").removeClass('is-invalid');
-                        } else {
-                            $("#invoiceNumber").addClass('is-invalid');
-                            $("#invoiceNumber").removeClass('is-valid');
-                        }
-                        $("#invoiceDate").val(data.invoice.invoice_date);
-                        if(data.invoice.invoice_date !== "") {
-                            $("#invoiceDate").addClass('is-valid');
-                            $("#invoiceDate").removeClass('is-invalid');
-                        } else {
-                            $("#invoiceDate").addClass('is-invalid');
-                            $("#invoiceDate").removeClass('is-valid');
-                        }
-                        $("#netValue").val(data.invoice.net_value);
-                        if(data.invoice.net_value !== "") {
-                            $("#netValue").addClass('is-valid');
-                            $("#netValue").removeClass('is-invalid');
-                        } else {
-                            $("#netValue").addClass('is-invalid');
-                            $("#netValue").removeClass('is-valid');
-                        }
-                        $("#gstValue").val(data.invoice.gst_value);
-                        if(data.invoice.gst_value !== "") {
-                            $("#gstValue").addClass('is-valid');
-                            $("#gstValue").removeClass('is-invalid');
-                        } else {
-                            $("#gstValue").addClass('is-invalid');
-                            $("#gstValue").removeClass('is-valid');
-                        }
-                        $("#grossValue").val(data.invoice.gross_value);
-                        if(data.invoice.gross_value !== "") {
-                            $("#grossValue").addClass('is-valid');
-                            $("#grossValue").removeClass('is-invalid');
-                        } else {
-                            $("#grossValue").addClass('is-invalid');
-                            $("#grossValue").removeClass('is-valid');
-                        }
-                        $("#currency").val(data.invoice.currency);
-                        $("#currency").addClass('is-valid');
 
-                        $("#poOrderNumber").val(data.invoice.po_order_number);
-                        $("#deliveryNote").val(data.invoice.delivery_note);
+
+                        
+
+
+
+
+
+
+
                         $("#materialHeaders").html(data.invoice.material_headers);
                         $("#materialRows").html(data.invoice.material_rows);
                         $("#serviceHeaders").html(data.invoice.service_headers);
@@ -214,8 +326,147 @@
                         }
 
                         if(data.invoice.material_rows_count > 0) {
+                            
+
+                            $("#buyer").val(data.invoice.buyer);
+                            if(data.invoice.buyer !== "") {
+                                $("#buyer").addClass('is-valid');
+                                $("#buyer").removeClass('is-invalid');
+                            } else {
+                                $("#buyer").addClass('is-invalid');
+                                $("#buyer").removeClass('is-valid');
+                            }
+                            
+                            $("#supplier").val(data.invoice.supplier);
+                            if(data.invoice.supplier !== "") {
+                                $("#supplier").addClass('is-valid');
+                                $("#supplier").removeClass('is-invalid');
+                            } else {
+                                $("#supplier").addClass('is-invalid');
+                                $("#buyer").removeClass('is-valid');
+                            }
+
+                            $("#debitCredit").val(data.invoice.debit_credit);
+                            $("#debitCredit").addClass('is-valid');
+                            $("#invoiceNumber").val(data.invoice.invoice_number);
+                            if(data.invoice.invoice_number !== "") {
+                                $("#invoiceNumber").addClass('is-valid');
+                                $("#invoiceNumber").removeClass('is-invalid');
+                            } else {
+                                $("#invoiceNumber").addClass('is-invalid');
+                                $("#invoiceNumber").removeClass('is-valid');
+                            }
+                            $("#invoiceDate").val(data.invoice.invoice_date);
+                            if(data.invoice.invoice_date !== "") {
+                                $("#invoiceDate").addClass('is-valid');
+                                $("#invoiceDate").removeClass('is-invalid');
+                            } else {
+                                $("#invoiceDate").addClass('is-invalid');
+                                $("#invoiceDate").removeClass('is-valid');
+                            }
+                            $("#netValue").val(data.invoice.net_value);
+                            if(data.invoice.net_value !== "") {
+                                $("#netValue").addClass('is-valid');
+                                $("#netValue").removeClass('is-invalid');
+                            } else {
+                                $("#netValue").addClass('is-invalid');
+                                $("#netValue").removeClass('is-valid');
+                            }
+                            $("#gstValue").val(data.invoice.gst_value);
+                            if(data.invoice.gst_value !== "") {
+                                $("#gstValue").addClass('is-valid');
+                                $("#gstValue").removeClass('is-invalid');
+                            } else {
+                                $("#gstValue").addClass('is-invalid');
+                                $("#gstValue").removeClass('is-valid');
+                            }
+                            $("#grossValue").val(data.invoice.gross_value);
+                            if(data.invoice.gross_value !== "") {
+                                $("#grossValue").addClass('is-valid');
+                                $("#grossValue").removeClass('is-invalid');
+                            } else {
+                                $("#grossValue").addClass('is-invalid');
+                                $("#grossValue").removeClass('is-valid');
+                            }
+                            $("#currency").val(data.invoice.currency);
+                            $("#currency").addClass('is-valid');
+
+                            $("#poOrderNumber").val(data.invoice.po_order_number);
+                            $("#deliveryNote").val(data.invoice.delivery_note);
+
+
                             $('#material-tab').attr("disabled", false);
-                        } else if(data.invoice.material_rows_count > 0 || data.invoice.service_rows_count > 0) {
+                        } else if(data.invoice.service_rows_count > 0) {
+
+                            $("#buyerService").val(data.invoice.buyer_service);
+                            if(data.invoice.buyer_service !== "") {
+                                $("#buyerService").addClass('is-valid');
+                                $("#buyerService").removeClass('is-invalid');
+                            } else {
+                                $("#buyerService").addClass('is-invalid');
+                                $("#buyerService").removeClass('is-valid');
+                            }
+                            
+                            $("#supplierService").val(data.invoice.supplier_service);
+                            if(data.invoice.supplier_service !== "") {
+                                $("#supplierService").addClass('is-valid');
+                                $("#supplierService").removeClass('is-invalid');
+                            } else {
+                                $("#supplierService").addClass('is-invalid');
+                                $("#buyerService").removeClass('is-valid');
+                            }
+
+                            $("#debitCreditService").val(data.invoice.debit_credit_service);
+                            $("#debitCreditService").addClass('is-valid');
+                            $("#invoiceNumberService").val(data.invoice.invoice_number_service);
+                            if(data.invoice.invoice_number_service !== "") {
+                                $("#invoiceNumberService").addClass('is-valid');
+                                $("#invoiceNumberService").removeClass('is-invalid');
+                            } else {
+                                $("#invoiceNumberService").addClass('is-invalid');
+                                $("#invoiceNumberService").removeClass('is-valid');
+                            }
+                            $("#invoiceDateService").val(data.invoice.invoice_date_service);
+                            if(data.invoice.invoice_date_service !== "") {
+                                $("#invoiceDateService").addClass('is-valid');
+                                $("#invoiceDateService").removeClass('is-invalid');
+                            } else {
+                                $("#invoiceDateService").addClass('is-invalid');
+                                $("#invoiceDateService").removeClass('is-valid');
+                            }
+                            $("#netValueService").val(data.invoice.net_value_service);
+                            if(data.invoice.net_value_service !== "") {
+                                $("#netValueService").addClass('is-valid');
+                                $("#netValueService").removeClass('is-invalid');
+                            } else {
+                                $("#netValueService").addClass('is-invalid');
+                                $("#netValueService").removeClass('is-valid');
+                            }
+                            $("#gstValueService").val(data.invoice.gst_value_service);
+                            if(data.invoice.gst_value_service !== "") {
+                                $("#gstValueService").addClass('is-valid');
+                                $("#gstValueService").removeClass('is-invalid');
+                            } else {
+                                $("#gstValueService").addClass('is-invalid');
+                                $("#gstValueService").removeClass('is-valid');
+                            }
+                            $("#grossValueService").val(data.invoice.gross_value_service);
+                            if(data.invoice.gross_value_service !== "") {
+                                $("#grossValueService").addClass('is-valid');
+                                $("#grossValueService").removeClass('is-invalid');
+                            } else {
+                                $("#grossValueService").addClass('is-invalid');
+                                $("#grossValueService").removeClass('is-valid');
+                            }
+                            $("#currencyService").val(data.invoice.currency_service);
+                            $("#currencyService").addClass('is-valid');
+
+                            $("#poOrderNumberService").val(data.invoice.po_order_number_service);
+                            $("#deliveryNoteService").val(data.invoice.delivery_note_service);
+
+
+
+
                             $('#service-tab').attr("disabled", false);
                         }
 
@@ -224,12 +475,7 @@
                                 for(var i = 0; i < invoices.length; i++) { 
                                     if(invoices[i].file === imagename) {
 
-                                        if(invoices[i].po_order_number !== invoices[i].sap_po_number){
-                                            $("#poOrderNumber").addClass('is-invalid');
-                                            $("#poOrderNumber").removeClass('is-valid');
-                                        }
-
-                                        if(imagename == 'invoice1.jpg'){
+                                        if(imagename == 'Single Line Item Invoice.jpg'){
                                             $("#grossValue").val(invoices[i].gross_value);
                                             if(invoices[i].gross_value !== "") {
                                                 $("#grossValue").addClass('is-valid');
@@ -270,6 +516,24 @@
                             sap_po_number: "",
                             vendor_code: "",
                             discount: "",
+
+
+                            buyer_service: $("#buyerService").val(),
+                            supplier_service: $("#supplierService").val(),
+                            debit_credit_service: $("#debitCreditService").val(),
+                            invoice_number_service: $("#invoiceNumberService").val(),
+                            invoice_date_service: $("#invoiceDateService").val(),
+                            net_value_service: $("#netValueService").val(),
+                            gst_value_service: $("#gstValueService").val(),
+                            gross_value_service: $("#grossValueService").val(),
+                            currency_service: $("#currencyService").val(),
+                            po_order_number_service: $("#poOrderNumberService").val(),
+                            delivery_note_service: $("#deliveryNoteService").val(),
+                            finance_material_service: "",
+                            sap_po_number_service: "",
+                            vendor_code_service: "",
+                            discount_service: "",
+                            
                             is_error: true,
                             material_headers: "",
                             material_rows: "",
@@ -283,11 +547,19 @@
                             for(var i = 0; i < invoices.length; i++) { 
                                 if(invoices[i].file === imagename) {
                                     invoiceItem.id = invoices[i].id;
+                                    invoiceItem.unique_number = invoices[i].unique_number;
                                     invoiceItem.file = invoices[i].file;
                                     invoiceItem.finance_material = invoices[i].finance_material;
                                     invoiceItem.sap_po_number = invoices[i].sap_po_number;
                                     invoiceItem.vendor_code = invoices[i].vendor_code;
                                     invoiceItem.discount = invoices[i].discount;
+
+                                    invoiceItem.finance_material_service = invoices[i].finance_material_service;
+                                    invoiceItem.sap_po_number_service = invoices[i].sap_po_number_service;
+                                    invoiceItem.vendor_code_service = invoices[i].vendor_code_service;
+                                    invoiceItem.discount_service = invoices[i].discount_service;
+
+
                                     invoiceItem.material_headers = invoices[i].material_headers;
                                     invoiceItem.material_rows = invoices[i].material_rows;
                                     invoiceItem.material_rows_count = invoices[i].material_rows_count;
@@ -411,15 +683,70 @@
             document.getElementById("complete_data")
             .addEventListener("click", function(e) {
                 if(validateInvoiceForm()) {
+
+                    
+
+
+
                     var imagename = $("#imageToProcess").data().imagename;   
                     $.getJSON( "/invoices.json", function( invoices ) {
                         for(var i = 0; i < invoices.length; i++) { 
                             if(invoices[i].file === imagename) {
+
+                                /*if(invoices[i].material_rows_count > 0) {
+                                    var netValue = $("#netValue").val();
+                                    if(!netValue.match(/^-?\d*(\.\d+)?$/)) {
+                                        bootbox.alert("Please enter valid Net Value");
+                                        return;
+                                    }
+
+                                    var gstValue = $("#gstValue").val();
+                                    if(!gstValue.match(/^-?\d*(\.\d+)?$/)) {
+                                        bootbox.alert("Please enter valid GST Value");
+                                        return;
+                                    }
+
+                                    var grossValue = $("#grossValue").val();
+                                    if(!grossValue.match(/^-?\d*(\.\d+)?$/)) {
+                                        bootbox.alert("Please enter valid Gross Value");
+                                        return;
+                                    }
+
+                                    if(!((parseFloat(netValue) + parseFloat(gstValue)) == parseFloat(grossValue))) {
+                                        bootbox.alert("The addition of Net Value and GST Value should be equal to Gross Value");
+                                        return;
+                                    }
+                                }
+                                
+                                if(invoices[i].service_rows_count > 0) {
+
+                                }*/
+
+
+
+                                if(invoices[i].po_order_number !== invoices[i].sap_po_number){
+                                    $("#poOrderNumber").addClass('is-invalid');
+                                    $("#poOrderNumber").removeClass('is-valid');
+                                }
+                                
+
+
+                                if(invoices[i].po_order_number_service !== invoices[i].sap_po_number_service){
+                                    $("#poOrderNumberService").addClass('is-invalid');
+                                    $("#poOrderNumberService").removeClass('is-valid');
+                                }
+
                                 $("#initiateWorkflowModal").modal('show');
                                 $("#financeMaterial").val(invoices[i].finance_material);
                                 $("#sapPoNumber").val(invoices[i].sap_po_number);
                                 $("#vendorCode").val(invoices[i].vendor_code);
                                 $("#discount").val(invoices[i].discount);
+
+
+                                $("#financeMaterialService").val(invoices[i].finance_material_service);
+                                $("#sapPoNumberService").val(invoices[i].sap_po_number_service);
+                                $("#vendorCodeService").val(invoices[i].vendor_code_service);
+                                $("#discountService").val(invoices[i].discount_service);
                             }
                         }
                     });

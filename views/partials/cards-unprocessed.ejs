@@ -1,12 +1,12 @@
 <div class="row">
     <% invoices.forEach(function(invoice) { %>
         
-        <a href="/card-process?invoice=<%= invoice.fileName %>&invoiceType=unprocessed" class="card mt-5 mr-3 col-2">
+        <a href="/card-process?invoice=<%= invoice.fileName %>&invoiceType=Unprocessed_Invoices" class="card mt-5 mr-3 col-2">
             <% var ext = (/[.]/.exec(invoice.fileName)) ? /[^.]+$/.exec(invoice.fileName) : undefined; %>
             <% if(ext && ext[0].toUpperCase() === 'PDF') { %>
                 <img src="images/pdf.svg" alt="invoice">
             <% } else { %>
-                <img src="unprocessed/<%= invoice.fileName %>" alt="invoice">
+                <img src="Unprocessed_Invoices/<%= invoice.fileName %>" alt="invoice">
             <% } %>
             <p class="card-text"><%= invoice.fileName %></p>
         </a>

@@ -4,9 +4,9 @@ var path = require('path');
 var fs = require('fs');
 var factory = require('../factory');
 var invoicesJson = require('../public/invoices');
-const unProcessedParentPath = 'C:/invoices/unprocessed/';
-const processedParentPath = 'C:/invoices/processed/';
-const errorInvoicesParentPath = 'C:/invoices/error_invoices/';
+const unProcessedParentPath = 'C:/invoices/Unprocessed_Invoices/';
+const processedParentPath = 'C:/invoices/Processed_Invoices/';
+const errorInvoicesParentPath = 'C:/invoices/Error_Invoices/';
 
 
 router.get('/card-list-unprocessed', (req, res)=>{
@@ -118,7 +118,7 @@ router.get('/dashboard', (req, res)=>{
     for(var i = 0; i < processedInvoices.length; i++) {
         var invoice = {
             fileName: processedInvoices[i].fileName,
-            invoiceType: 'processed',
+            invoiceType: 'Processed_Invoices',
             type: 'success'
         }
         totalInvoices.push(invoice);
@@ -127,7 +127,7 @@ router.get('/dashboard', (req, res)=>{
     for(var i = 0; i < errorInvoices.length; i++) {
         var invoice = {
             fileName: errorInvoices[i].fileName,
-            invoiceType: 'error_invoices',
+            invoiceType: 'Error_Invoices',
             type: 'danger'
         }
         totalInvoices.push(invoice);

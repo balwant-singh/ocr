@@ -229,7 +229,7 @@ ocrsdk.prototype.downloadResult = function(resultUrl, template,
 						netValue += nextChar;
 					}
 
-					var gstValueChars = result.document.page[0].block[22].row[0].cell[2].text[0].par[0].line[0].formatting[0].charParams;
+					var gstValueChars = result.document.page[0].block[22].row[4].cell[2].text[0].par[0].line[0].formatting[0].charParams;
 					var gstValue = "";
 					for(var i = 0; i < gstValueChars.length; i++) {
 						var nextChar = " "
@@ -308,6 +308,24 @@ ocrsdk.prototype.downloadResult = function(resultUrl, template,
 						currency: "INR",
 						po_order_number: poNo,
 						delivery_note: "",
+
+						buyer_service:"",
+						supplier_service:"",
+						debit_credit_service:"Debit",
+						invoice_number_service:"",
+						invoice_date_service:"",
+						net_value_service:"",
+						gst_value_service:"",
+						gross_value_service:"",
+						currency_service:"INR",
+						po_order_number_service:"",
+						delivery_note_service:"",
+						finance_material_service:"",
+						sap_po_number_service:"",
+						vendor_code_service:"",
+						discount_service:"",
+
+
 						material_headers: tableHeaders,
 						material_rows: tableRows,
 						material_rows_count: lineItemsCount,

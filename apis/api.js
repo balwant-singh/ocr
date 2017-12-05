@@ -4,9 +4,9 @@ var path = require('path');
 var fs = require('fs');
 var invoicesJson = require('../public/invoices');
 var ocrsdkModule = require('./ocrsdk.js');
-const unProcessedParentPath = 'C:/invoices/unprocessed/';
-const processedParentPath = 'C:/invoices/processed/';
-const errorInvoicesParentPath = 'C:/invoices/error_invoices/';
+const unProcessedParentPath = 'C:/invoices/Unprocessed_Invoices/';
+const processedParentPath = 'C:/invoices/Processed_Invoices/';
+const errorInvoicesParentPath = 'C:/invoices/Error_Invoices/';
 
 router.post('/process-data', (req, res)=>{
     var image_name = req.body.image_name;
@@ -23,18 +23,18 @@ router.post('/process-data', (req, res)=>{
     }
     var updatedInvoicesJson = JSON.stringify(invoicesJson);
     fs.writeFileSync('./public/invoices.json', updatedInvoicesJson, 'utf8');
-    if(invoiceType === "error_invoices")
+    if(invoiceType === "Error_Invoices")
         sourcePath = errorInvoicesParentPath;
     if(isError == "true") {
         //fs.mkdir(processedParentPath, function() {
             fs.renameSync(sourcePath + image_name, errorInvoicesParentPath + image_name);
-            fs.renameSync('public/' + invoiceType + '/' + image_name, 'public/error_invoices/' + image_name);
+            fs.renameSync('public/' + invoiceType + '/' + image_name, 'public/Error_Invoices/' + image_name);
             res.send(JSON.stringify({ response: 'error' }));
         //});
     } else {
         //fs.mkdir(processedParentPath, function() {
            fs.renameSync(sourcePath + image_name, processedParentPath + image_name);
-           fs.renameSync('public/' + invoiceType + '/' + image_name, 'public/processed/' + image_name);
+           fs.renameSync('public/' + invoiceType + '/' + image_name, 'public/Processed_Invoices/' + image_name);
            res.send(JSON.stringify({ response: 'success' }));
        //});
     }

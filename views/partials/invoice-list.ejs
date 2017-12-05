@@ -1,4 +1,4 @@
-<div class="row mt-5">
+<div class="row mt-5 dashboard-header">
   <h2 class="col-8">Post Processing Dashboard</h2>
   <div class="d-flex justify-content-end col-4">
     <p><span class="badge badge-success text-right mr-1">Processed</span></p>
@@ -21,16 +21,20 @@
       </tr>
     </thead>
     <tbody>
-      <% invoices.forEach(function(invoice, i) { %>
-        <tr data-toggle="modal" data-id="<%= invoice.id %>" data-file="<%= invoice.file %>" data-invoicetype="<%= invoice.invoiceType %>" data-target="#orderModal" class="table-<%= invoice.type %> clickable">
-          <td class="text-center">20000<%= i + 1 %></td>
-          <td class="text-center"><i class="fa fa-envelope fa-1x"></i></td>
-          <td class="text-center"><%= invoice.file %></td>
-          <td class="text-center"><%= invoice.invoice_number %></td>
-          <td class="text-center"><%= invoice.supplier %></td>
-          <td class="text-center"><%= invoice.debit_credit %></td>
-          <td class="text-center"><%= invoice.sap_po_number %></td>
-          <td class="text-center"><%= (invoice.is_error) ? 'Error' : 'Posted in SAP' %></td>
+        <% invoices.forEach(function(invoice, i) { %>
+            <tr data-toggle="modal" data-id="<%= invoice.id %>" data-file="<%= invoice.file %>" data-invoicetype="<%= invoice.invoiceType %>" data-target="#orderModal" class="table-<%= invoice.type %> clickable">
+            <td class="text-center"><%= invoice.unique_number %></td>
+            <td class="text-center">
+                <% if(!invoice.is_error) { %>  
+                    <i class="fa fa-envelope fa-1x"></i>
+                <% } %> 
+            </td>
+            <td class="text-center"><%= invoice.file %></td>
+            <td class="text-center"><%= invoice.invoice_number %></td>
+            <td class="text-center"><%= invoice.supplier %></td>
+            <td class="text-center"><%= invoice.debit_credit %></td>
+            <td class="text-center"><%= invoice.sap_po_number %></td>
+            <td class="text-center"><%= (invoice.is_error) ? 'Error' : 'Posted in SAP' %></td>
         </tr>
       <% }); %>
     </tbody>
