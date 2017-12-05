@@ -57,10 +57,8 @@
 
                 //$("#complete_data").attr("disabled", "disabled");
                 //$("#process-invoice-form").find('.form-control').attr("disabled", true);
-                $(".service-form-row").hide();
-                $("#material-tab" ).click(function() {
-                    
-                    var imagename = $("#imageToProcess").data().imagename;   
+                
+                /*var imagename = $("#imageToProcess").data().imagename;   
                     $.getJSON( "/invoices.json", function( invoices ) {
                         for(var i = 0; i < invoices.length; i++) { 
                             if(invoices[i].file === imagename) {
@@ -132,17 +130,7 @@
                             }
                         }
                     });
-                    
-                    
-                    $(".material-form-row").show();
-                    $(".service-form-row").hide();
 
-
-
-
-                });
-
-                $("#service-tab" ).click(function() {
                     var imagename = $("#imageToProcess").data().imagename;   
                     $.getJSON( "/invoices.json", function( invoices ) {
                         for(var i = 0; i < invoices.length; i++) { 
@@ -214,9 +202,16 @@
                                 $("#deliveryNoteService").val(invoices[i].delivery_note_service);
                             }
                         }
-                    });
+                    });*/
 
+                    $(".service-form-row").hide();
 
+                $("#material-tab" ).click(function() {
+                    $(".material-form-row").show();
+                    $(".service-form-row").hide();
+                });
+
+                $("#service-tab" ).click(function() {
                     $(".material-form-row").hide();
                     $(".service-form-row").show();
                 });
@@ -498,7 +493,8 @@
                     if(data.response == "success") {
                         waitingDialog.hide();
                     } else {
-                        var invoiceItem = {
+                        var invoiceItem = data.invoice;
+                        /*var invoiceItem = {
                             id:"",
                             file: "",
                             buyer: $("#buyer").val(),
@@ -541,12 +537,12 @@
                             service_headers: "",
                             service_rows: "",
                             service_rows_count: ""
-                        }
+                        } */
                         
                         $.getJSON( "/invoices.json", function( invoices ) {
                             for(var i = 0; i < invoices.length; i++) { 
                                 if(invoices[i].file === imagename) {
-                                    invoiceItem.id = invoices[i].id;
+                                    /*invoiceItem.id = invoices[i].id;
                                     invoiceItem.unique_number = invoices[i].unique_number;
                                     invoiceItem.file = invoices[i].file;
                                     invoiceItem.finance_material = invoices[i].finance_material;
@@ -565,7 +561,7 @@
                                     invoiceItem.material_rows_count = invoices[i].material_rows_count;
                                     invoiceItem.service_headers = invoices[i].service_headers;
                                     invoiceItem.service_rows = invoices[i].service_rows;
-                                    invoiceItem.service_rows_count = invoices[i].service_rows_count;
+                                    invoiceItem.service_rows_count = invoices[i].service_rows_count;*/
                                     $.post("api/process-data",
                                     {
                                         image_name: imagename,
