@@ -625,8 +625,10 @@
 
             function validateInvoiceForm() {
                 var isValid = true;
+                var validationMSg = "";
                 if($("#buyer").val() == "") {
                     $("#buyer").addClass('is-invalid');
+                    validationMSg += "Material Invoice buyer should not be blank<br/>";
                     isValid = false;
                 } else {
                     $("#buyer").removeClass('is-invalid');
@@ -634,6 +636,7 @@
 
                 if($("#supplier").val() == "") {
                     $("#supplier").addClass('is-invalid');
+                    validationMSg += "Material Invoice supplier should not be blank<br/>";
                     isValid = false;                    
                 } else {
                     $("#supplier").removeClass('is-invalid');
@@ -641,6 +644,7 @@
 
                 if($("#invoiceNumber").val() == "") {
                     $("#invoiceNumber").addClass('is-invalid');
+                    validationMSg += "Material Invoice No. should not be blank<br/>";
                     isValid = false;                    
                 } else {
                     $("#invoiceNumber").removeClass('is-invalid');
@@ -648,6 +652,7 @@
 
                 if($("#invoiceDate").val() == "") {
                     $("#invoiceDate").addClass('is-invalid');
+                    validationMSg += "Material Invoice Date should not be blank<br/>";
                     isValid = false;
                 } else {
                     $("#invoiceDate").removeClass('is-invalid');
@@ -655,6 +660,7 @@
 
                 if($("#netValue").val() == "") {
                     $("#netValue").addClass('is-invalid');
+                    validationMSg += "Material Invoice Net Value should not be blank<br/>";
                     isValid = false;
                 } else {
                     $("#netValue").removeClass('is-invalid');
@@ -662,6 +668,7 @@
 
                 if($("#gstValue").val() == "") {
                     $("#gstValue").addClass('is-invalid');
+                    validationMSg += "Material Invoice GST Value should not be blank<br/>";
                     isValid = false;                    
                 } else {
                     $("#gstValue").removeClass('is-invalid');
@@ -669,10 +676,73 @@
 
                 if($("#grossValue").val() == "") {
                     $("#grossValue").addClass('is-invalid');
+                    validationMSg += "Material Invoice Gross Value should not be blank<br/>";
                     isValid = false;
                 } else {
                     $("#grossValue").removeClass('is-invalid');
                 }
+
+
+                if($("#buyerService").val() == "") {
+                    $("#buyerService").addClass('is-invalid');
+                    validationMSg += "Service Invoice buyer should not be blank<br/>";
+                    isValid = false;
+                } else {
+                    $("#buyerService").removeClass('is-invalid');
+                }
+
+                if($("#supplierService").val() == "") {
+                    $("#supplierService").addClass('is-invalid');
+                    validationMSg += "Service Invoice supplier should not be blank<br/>";
+                    isValid = false;                    
+                } else {
+                    $("#supplierService").removeClass('is-invalid');
+                }
+
+                if($("#invoiceNumberService").val() == "") {
+                    $("#invoiceNumberService").addClass('is-invalid');
+                    validationMSg += "Service Invoice No. should not be blank<br/>";
+                    isValid = false;                    
+                } else {
+                    $("#invoiceNumberService").removeClass('is-invalid');
+                }
+
+                if($("#invoiceDateService").val() == "") {
+                    $("#invoiceDateService").addClass('is-invalid');
+                    validationMSg += "Service Invoice Date should not be blank<br/>";
+                    isValid = false;
+                } else {
+                    $("#invoiceDateService").removeClass('is-invalid');
+                }
+
+                if($("#netValueService").val() == "") {
+                    $("#netValueService").addClass('is-invalid');
+                    validationMSg += "Service Invoice Net Value should not be blank<br/>";
+                    isValid = false;
+                } else {
+                    $("#netValueService").removeClass('is-invalid');
+                }
+
+                if($("#gstValueService").val() == "") {
+                    $("#gstValueService").addClass('is-invalid');
+                    validationMSg += "Service Invoice GST Value should not be blank<br/>";
+                    isValid = false;                    
+                } else {
+                    $("#gstValueService").removeClass('is-invalid');
+                }
+
+                if($("#grossValueService").val() == "") {
+                    $("#grossValueService").addClass('is-invalid');
+                    validationMSg += "Service Invoice Gross Value should not be blank<br/>";
+                    isValid = false;
+                } else {
+                    $("#grossValueService").removeClass('is-invalid');
+                }
+
+                if(!isValid) {
+                    bootbox.alert(validationMSg);
+                }
+
                 return isValid;
             }
 
