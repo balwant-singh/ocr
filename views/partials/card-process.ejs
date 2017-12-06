@@ -400,16 +400,16 @@
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
                             <% if(invoiceItem.material_rows_count > 0) { %>
-                                <button type="button" class="nav-link" id="material-tab" data-toggle="tab" href="#material" role="tab" aria-controls="material" aria-selected="true">Materials(<%= invoiceItem.material_rows_count %>)</button>
+                                <button type="button"  data-rowcount="<%= (invoiceItem && invoiceItem.material_rows_count > 0) ? invoiceItem.material_rows_count : 0 %>" class="nav-link" id="material-tab" data-toggle="tab" href="#material" role="tab" aria-controls="material" aria-selected="true">Materials(<%= invoiceItem.material_rows_count %>)</button>
                             <% } else { %>
-                                <button type="button" disabled class="nav-link" id="material-tab" data-toggle="tab" href="#material" role="tab" aria-controls="material" aria-selected="true">Materials(<%= invoiceItem.material_rows_count %>)</button>
+                                <button type="button"  data-rowcount="<%= (invoiceItem && invoiceItem.material_rows_count > 0) ? invoiceItem.material_rows_count : 0 %>" disabled class="nav-link" id="material-tab" data-toggle="tab" href="#material" role="tab" aria-controls="material" aria-selected="true">Materials(<%= invoiceItem.material_rows_count %>)</button>
                             <% } %>
                         </li>
                         <li class="nav-item">
                             <% if(invoiceItem.service_rows_count > 0) { %>
-                                <button class="nav-link ml-1" id="service-tab" data-toggle="tab" href="#service" role="tab" aria-controls="service" aria-selected="false">Services(<%= invoiceItem.service_rows_count %>)</button>
+                                <button class="nav-link ml-1" id="service-tab"  data-rowcount="<%= (invoiceItem && invoiceItem.service_rows_count > 0) ? invoiceItem.service_rows_count : 0 %>" data-toggle="tab" href="#service" role="tab" aria-controls="service" aria-selected="false">Services(<%= invoiceItem.service_rows_count %>)</button>
                             <% } else { %>
-                                <button class="nav-link ml-1" disabled id="service-tab" data-toggle="tab" href="#service" role="tab" aria-controls="service" aria-selected="false">Services(<%= invoiceItem.service_rows_count %>)</button>
+                                <button class="nav-link ml-1"  data-rowcount="<%= (invoiceItem && invoiceItem.service_rows_count > 0) ? invoiceItem.service_rows_count : 0 %>" disabled id="service-tab" data-toggle="tab" href="#service" role="tab" aria-controls="service" aria-selected="false">Services(<%= invoiceItem.service_rows_count %>)</button>
                             <% } %>
                         </li>
                     </ul>
