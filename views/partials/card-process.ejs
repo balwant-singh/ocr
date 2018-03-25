@@ -8,7 +8,8 @@
                             <p class="card-header-title"><strong><%= fileName %></strong></p>
                                 <div class=''>
                                     <% if(invoiceType !== 'Processed_Invoices') { %>
-                                        <button type="button" id="go_button" data-imagesrc="<%= invoiceType %>/<%= fileName %>" data-imagename="<%= fileName %>" class="btn btn-sm btn-primary mr-1">Read</button> 
+                                        <button type="button" id="read_selected_data" class="btn btn-sm btn-primary mr-1">Read Selected Data</button> 
+                                        <button type="button" id="go_button" data-imagesrc="<%= invoiceType %>/<%= fileName %>" data-imagename="<%= fileName %>" class="btn btn-sm btn-primary mr-1">Read</button>
                                         <button type="button"  id="complete_data" data-toggle="modal" data-invoicetype="<%= invoiceType %>" class="btn btn-sm btn-primary">Complete Data</button>
                                      <% } %>   
                                     <!-- Modal -->
@@ -190,7 +191,7 @@
                                     </div>
                                 </div>
                         </div>
-                        <div id="invoice-img-container" class="card-block">
+                        <div id="invoice-img-container" class="card-block photo-container">
                             <% var ext = (/[.]/.exec(fileName)) ? /[^.]+$/.exec(fileName) : undefined;%>
                             <% if(ext && ext[0].toUpperCase() == "PDF") { %>
                                 <div id="imageToProcess" data-imagename="<%= fileName %>" data-invoicetype="<%= invoiceType %>" alt="invoice"></div>
@@ -206,30 +207,124 @@
                                     }
                                 </style>
                             <% } else { %>
-                                <img id="imageToProcess" src="<%= invoiceType %>/<%= fileName %>"  data-imagename="<%= fileName %>" data-invoicetype="<%= invoiceType %>" alt="invoice">
+                                <img id="imageToProcess" src="<%= invoiceType %>/<%= fileName %>"  data-imagename="<%= fileName %>"
+                                    data-invoicetype="<%= invoiceType %>" alt="invoice">
+                                <script src="http://jcrop-cdn.tapmodo.com/v2.0.0-RC1/js/Jcrop.js"></script>
+                                <link rel="stylesheet" href="http://jcrop-cdn.tapmodo.com/v2.0.0-RC1/css/Jcrop.css" type="text/css">
+                                
                                 <style>
-                                    /*#process-container .invoice-viewer .row, #process-container .invoice-viewer .row .invoice-process-card {
-                                        height: calc(100% - 24em) !important;
+                                    /*.jcrop-active {
+                                        width: 100% !important;
+                                        height: 100% !important;
                                     }*/
+                                    .jcrop-shades div {
+                                        background-color: transparent !important;
+                                    }
+                                    .jcrop-box {
+                                        border: 2px solid #f23819 !important;
+                                    }
+                                    .selection-type {
+                                        background: #696969;
+                                        color: #FFF;
+                                        font-size: 0.8rem;
+                                    }
+                                   
                                 </style>
+                                <!-- Activate maphilight plugin -->
+                                <script type="text/javascript">
+                                    var jcrop_api;
+                                    jQuery(function($){
+                                        $('#imageToProcess').Jcrop({
+                                            multi: true,
+                                            canDelete: true
+                                        },function(){
+                                            jcrop_api = this;
+                                            jcrop_api.container.on('cropstart',function(e,s){
+                                                var choices = ["Invoice No.", "Vendor Name"];
+                                                if($('.jcrop-current select.selection-type').length === 0) {
+                                                    var selectHTML = "";
+                                                    selectHTML="<select class='selection-type'>";
+                                                    for(i = 0; i < choices.length; i = i + 1) {
+                                                        selectHTML += "<option value='" + choices[i] + "'>" + choices[i] + "</option>";
+                                                    }
+                                                    selectHTML += "</select>";
+                                                    $('.jcrop-current').append(selectHTML);
+                                                    $('select.selection-type').click(function(e) {
+                                                        e.stopPropagation();
+                                                    });
+
+                                                    $('select.selection-type').mousedown(function(e) {
+                                                        e.stopPropagation();
+                                                    });
+
+                                                    $('select.selection-type').mouseup(function(e) {
+                                                        e.stopPropagation();
+                                                    });
+                                                }
+                                            });
+
+                                            
+
+                                            $('#read_selected_data').click(function() {
+                                                // get source image
+                                                var orgImg = $('#imageToProcess').get(0);
+                                            
+                                                // draw image to canvas and get image data
+                                                var canvas = document.createElement("canvas");
+                                                canvas.width = orgImg.width;
+                                                canvas.height = orgImg.height;
+                                                var ctx = canvas.getContext("2d");
+                                                ctx.drawImage(orgImg, 0, 0);
+                                                
+                                                for(var i = 0; i < jcrop_api.ui.multi.length; i++) {
+                                                    var x = jcrop_api.ui.multi[i].element[0].offsetLeft;
+                                                    var y = jcrop_api.ui.multi[i].element[0].offsetTop;
+                                                    var w = jcrop_api.ui.multi[i].element[0].offsetWidth;
+                                                    var h = jcrop_api.ui.multi[i].element[0].offsetHeight;
+                                                    var imageData = ctx.getImageData(x, y, w, h);
+
+                                                    var canvas1 = document.createElement("canvas");
+                                                    canvas1.width = w;
+                                                    canvas1.height = h;
+                                                    var ctx1 = canvas1.getContext("2d");
+                                                    ctx1.rect(0, 0, w, h);
+                                                    ctx1.fillStyle = 'white';
+                                                    ctx1.fill();
+                                                    ctx1.putImageData(imageData, 0, 0);
+                                                
+                                                    var dstImg = document.createElement('img');
+                                                    dstImg.src = canvas1.toDataURL("image/png");
+                                                    dstImg.style.position = "absolute";
+                                                    dstImg.style.zIndex = "9999";
+                                                    $('body').append(dstImg);
+
+                                                    $.post("https://api.ocr.space/parse/image",
+                                                    {
+                                                        apikey: "aa7aa7676d88957",
+                                                        language: "eng",
+                                                        isOverlayRequired: "true",
+                                                        base64Image: canvas1.toDataURL("image/png")
+                                                    },
+                                                    function(data, status){
+                                                        console.log(data.ParsedResults[0].ParsedText);
+                                                    });
+
+                                                   
+
+
+
+
+                                                    //console.log("top:" + jcrop_api.ui.multi[i].element[0].offsetTop + ", left:" + jcrop_api.ui.multi[i].element[0].offsetLeft + ", width:" + jcrop_api.ui.multi[i].element[0].offsetWidth + ", height:" + jcrop_api.ui.multi[i].element[0].offsetHeight);
+                                                }
+                                            });
+                                        });
+                                    });
+                                </script>
                             <% } %>
-                        
                         </div>
                     </div>
                 </div>
-                <!--<div class="d-flex justify-content-end mt-2">
-                    
-                </div>-->
-            <!--</div>-->
         </div>
-        <!--<form class="col-3 mt-5">
-            <div id="ocr_status"> </div>
-            <div class="form-group">
-                <textarea rows="15" class="form-control" id="ocr_results"> </textarea>
-            </div>
-            <button type="button"  data-iserror="" data-invoicetype="<%= invoiceType %>" id="format_button" class="btn btn-primary float-right">Format</button>
-        </form>-->
-
         <form id="process-invoice-form" class="col-4 mt-2">
             <div class="d-flex justify-content-end">
                 <% if (invoiceType === 'Error_Invoices') { %>
@@ -395,75 +490,67 @@
     </div>
     
     <div class="panel-group col-md-12 col-sm-12 col-xs-12" id="accordion">
-            <div class="panel panel-default">
-                <div class="panel-heading clearfix d-flex">
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item">
-                            <% if(invoiceItem.material_rows_count > 0) { %>
-                                <button type="button"  data-rowcount="<%= (invoiceItem && invoiceItem.material_rows_count > 0) ? invoiceItem.material_rows_count : 0 %>" class="nav-link" id="material-tab" data-toggle="tab" href="#material" role="tab" aria-controls="material" aria-selected="true">Materials(<%= invoiceItem.material_rows_count %>)</button>
-                            <% } else { %>
-                                <button type="button"  data-rowcount="<%= (invoiceItem && invoiceItem.material_rows_count > 0) ? invoiceItem.material_rows_count : 0 %>" disabled class="nav-link" id="material-tab" data-toggle="tab" href="#material" role="tab" aria-controls="material" aria-selected="true">Materials(<%= invoiceItem.material_rows_count %>)</button>
-                            <% } %>
-                        </li>
-                        <li class="nav-item">
-                            <% if(invoiceItem.service_rows_count > 0) { %>
-                                <button class="nav-link ml-1" id="service-tab"  data-rowcount="<%= (invoiceItem && invoiceItem.service_rows_count > 0) ? invoiceItem.service_rows_count : 0 %>" data-toggle="tab" href="#service" role="tab" aria-controls="service" aria-selected="false">Services(<%= invoiceItem.service_rows_count %>)</button>
-                            <% } else { %>
-                                <button class="nav-link ml-1"  data-rowcount="<%= (invoiceItem && invoiceItem.service_rows_count > 0) ? invoiceItem.service_rows_count : 0 %>" disabled id="service-tab" data-toggle="tab" href="#service" role="tab" aria-controls="service" aria-selected="false">Services(<%= invoiceItem.service_rows_count %>)</button>
-                            <% } %>
-                        </li>
-                    </ul>
-                    <div class="ml-auto">
-                        <% if (invoiceType === 'Error_Invoices') { %>
-                            <!--<button type="button" id="add_line_item_button" class="btn btn-sm btn-primary">Add Line Item</button>-->
-                        <% } %>
-                        <% if(invoiceItem.material_rows_count > 0 || invoiceItem.service_rows_count > 0) { %>
-                            <button id="lineItemsToggle" type="button" data-toggle="collapse" data-parent="#accordion" href="#line-items-container" class="btn btn-sm btn-primary pull-right">Line Item</button>
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix d-flex">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <% if(invoiceItem.material_rows_count > 0) { %>
+                            <button type="button"  data-rowcount="<%= (invoiceItem && invoiceItem.material_rows_count > 0) ? invoiceItem.material_rows_count : 0 %>" class="nav-link" id="material-tab" data-toggle="tab" href="#material" role="tab" aria-controls="material" aria-selected="true">Materials(<%= invoiceItem.material_rows_count %>)</button>
                         <% } else { %>
-                            <button id="lineItemsToggle" disabled type="button" data-toggle="collapse" data-parent="#accordion" href="#line-items-container" class="btn btn-sm btn-primary pull-right">Line Item</button>
+                            <button type="button"  data-rowcount="<%= (invoiceItem && invoiceItem.material_rows_count > 0) ? invoiceItem.material_rows_count : 0 %>" disabled class="nav-link" id="material-tab" data-toggle="tab" href="#material" role="tab" aria-controls="material" aria-selected="true">Materials(<%= invoiceItem.material_rows_count %>)</button>
                         <% } %>
-                    </div>
+                    </li>
+                    <li class="nav-item">
+                        <% if(invoiceItem.service_rows_count > 0) { %>
+                            <button class="nav-link ml-1" id="service-tab"  data-rowcount="<%= (invoiceItem && invoiceItem.service_rows_count > 0) ? invoiceItem.service_rows_count : 0 %>" data-toggle="tab" href="#service" role="tab" aria-controls="service" aria-selected="false">Services(<%= invoiceItem.service_rows_count %>)</button>
+                        <% } else { %>
+                            <button class="nav-link ml-1"  data-rowcount="<%= (invoiceItem && invoiceItem.service_rows_count > 0) ? invoiceItem.service_rows_count : 0 %>" disabled id="service-tab" data-toggle="tab" href="#service" role="tab" aria-controls="service" aria-selected="false">Services(<%= invoiceItem.service_rows_count %>)</button>
+                        <% } %>
+                    </li>
+                </ul>
+                <div class="ml-auto">
+                    <% if (invoiceType === 'Error_Invoices') { %>
+                        <!--<button type="button" id="add_line_item_button" class="btn btn-sm btn-primary">Add Line Item</button>-->
+                    <% } %>
+                    <% if(invoiceItem.material_rows_count > 0 || invoiceItem.service_rows_count > 0) { %>
+                        <button id="lineItemsToggle" type="button" data-toggle="collapse" data-parent="#accordion" href="#line-items-container" class="btn btn-sm btn-primary pull-right">Line Item</button>
+                    <% } else { %>
+                        <button id="lineItemsToggle" disabled type="button" data-toggle="collapse" data-parent="#accordion" href="#line-items-container" class="btn btn-sm btn-primary pull-right">Line Item</button>
+                    <% } %>
                 </div>
-                
-                <div id="line-items-container" class="panel-collapse collapse">
-                    <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="material" role="tabpanel" aria-labelledby="material-tab">
-                            <table id="material-tbl" class="table table-bordered">
-                                <thead>
-                                    <tr id="materialHeaders">
-                                        <%- invoiceItem.material_headers %>
-                                    </tr>
-                                </thead>
-                                <tbody id="materialRows">
-                                    <%- invoiceItem.material_rows %>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="tab-pane fade" id="service" role="tabpanel" aria-labelledby="service-tab">
-                            <table id="service-tbl" class="table table-bordered">
-                                <thead>
-                                    <tr id="serviceHeaders">
-                                        <%- invoiceItem.service_headers %>
-                                    </tr>
-                                </thead>
-                                <tbody id="serviceRows">
-                                    <%- invoiceItem.service_rows %>
-                                </tbody>
-                            </table>
-                        </div>
+            </div>
+            
+            <div id="line-items-container" class="panel-collapse collapse">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="material" role="tabpanel" aria-labelledby="material-tab">
+                        <table id="material-tbl" class="table table-bordered">
+                            <thead>
+                                <tr id="materialHeaders">
+                                    <%- invoiceItem.material_headers %>
+                                </tr>
+                            </thead>
+                            <tbody id="materialRows">
+                                <%- invoiceItem.material_rows %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="service" role="tabpanel" aria-labelledby="service-tab">
+                        <table id="service-tbl" class="table table-bordered">
+                            <thead>
+                                <tr id="serviceHeaders">
+                                    <%- invoiceItem.service_headers %>
+                                </tr>
+                            </thead>
+                            <tbody id="serviceRows">
+                                <%- invoiceItem.service_rows %>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
-
-
-
-
-
+    </div>
     <style>
-        /*.service-form-row {
-            display: none;
-        }*/
         p.card-header-title {
             line-height: 2rem;
             margin: 0;
@@ -524,13 +611,9 @@
             position: fixed;
             bottom: 30px;
             border-radius:none !important;
-            
             z-index:1030;
             background-color: #FFF;
             margin-left: -32px;
-            /*padding-left:0px;
-            padding-right:0px;
-            padding: 0.5rem 1rem;*/
             padding: 0;
             bottom: 0;
         }
@@ -554,362 +637,5 @@
     <div class="col-12 card mt-2">
         <img src="<%= invoiceType %>/<%= fileName %>" alt="invoice">
     </div>
-    <!--<h6 class="mt-5 mb-0">Authorized VW Dealer</h6>
-    <h4 class="mt-0 mb-0">Global Gallarie Motors Pvt Ltd</h4>
-    <p class="lead mt-0 mb-0">Plot# 1, Mohan Mill Compound</p>
-    <p class="lead mt-0 mb-0">Ghodbunder Rd,Opp. Levi's SR, Thane, 400607</p>
-    <div class="d-flex justify-content-between">
-        <div class="d-block">
-            <p class="d-inline"><strong>VAT R.C. No.:</strong></p>
-            <p class="d-inline">27180770320V</p>
-        </div>
-        <div class="d-block">
-            <p class="d-inline"><strong>Phone No.</strong></p>
-            <p class="d-inline">022 57354444/07735534444</p>
-        </div>
-    </div>
-    <div class="d-flex justify-content-between">
-        <div class="d-block">
-            <p class="d-inline"><strong>C.S.T.R.C No.:</strong></p>
-            <p class="d-inline">27180770320C</p>
-        </div>
-        <div class="d-block">
-            <p class="d-inline"><strong>Fax No.</strong></p>
-            <p class="d-inline">022 25592395</p>
-        </div>
-    </div>
-    <div class="d-flex justify-content-between">
-        <div class="d-block">
-            <p class="d-inline"><strong>Ser. Tax. No.:</strong></p>
-            <p class="d-inline">AADCG7539KSDUD1</p>
-        </div>
-        <div class="d-block">
-            <p class="d-inline"><strong>E-Mail</strong></p>
-            <p class="d-inline">service@vw-ggmpl.co.in</p>
-        </div>
-    </div>
-    <div class="d-flex justify-content-between">
-        <div class="d-block">
-            <p class="d-inline"><strong>PAN:</strong></p>
-            <p class="d-inline">AADCG7539K</p>
-        </div>
-    </div>
-    <hr>
-    
-    <h1 class="jumbotr on-heading">Tax Invoice</h1>
-    <div class="d-flex justify-content-between">
-        <div class="d-block">
-            <p class="d-inline"><strong>Repair Order No.</strong></p>
-            <p class="d-inline">50104745</p>
-        </div>
-        <div class="d-block">
-            <p class="d-inline"><strong>Invoice No.</strong></p>
-            <p class="d-inline">SIP/JUL/0457</p>
-        </div>
-    </div>
-    <div class="d-flex justify-content-between">
-        <div class="d-block">
-            <p class="d-inline"><strong>Repair Order Date</strong></p>
-            <p class="d-inline">20-Jul-11</p>
-        </div>
-        <div class="d-block">
-            <p class="d-inline"><strong>Invoice Date</strong></p>
-            <p class="d-inline">20-Jul-11</p>
-        </div>
-    </div>
-    <div class="d-flex justify-content-between">
-        <div class="d-block">
-            <p class="d-inline"><strong>Customer Name</strong></p>
-            <p class="d-inline"></p>
-        </div>
-        <div class="d-block">
-            <p class="d-inline"><strong>Regn. No.</strong></p>
-            <p class="d-inline"></p>
-        </div>
-    </div>
-    <div class="d-flex justify-content-between">
-        <div class="d-block">
-            <p class="d-inline"><strong>Customer Add.</strong></p>
-            <p class="d-inline"></p>
-        </div>
-        <div class="d-block">
-            <p class="d-inline"><strong>VIN</strong></p>
-            <p class="d-inline"></p>
-        </div>
-    </div>
-    <div class="d-flex justify-content-end">
-        <div class="d-block">
-            <p class="d-inline"><strong>Model</strong></p>
-            <p class="d-inline">Vento Trendiine</p>
-        </div>
-    </div>
-    <div class="d-flex justify-content-end">
-        <div class="d-block">
-            <p class="d-inline"><strong>Kms In</strong></p>
-            <p class="d-inline">14,900</p>
-        </div>
-    </div>
-    <div class="d-flex justify-content-end">
-        <div class="d-block">
-            <p class="d-inline"><strong>Kms Out</strong></p>
-            <p class="d-inline">14,900</p>
-        </div>
-    </div>        
-    
-    <h4 class="mt-5">Demanded Repair (Customer Voice)</h4>
-    <table class="table table-bordered">
-        <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>do 15000km service</td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>check under carrige noise</td>
-            </tr>
-        </tbody>
-    </table>
-    
-    <h3 class="mt-5 text-center">Labor Details</h3>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th scope="col">S. No.</th>
-                <th scope="col">Description</th>
-                <th scope="col">Labor Code</th>
-                <th scope="col">Category</th>
-                <th scope="col">Rate</th>
-                <th scope="col">Qty.</th>
-                <th scope="col"></th>
-                <th scope="col">Amount</th>
-                <th scope="col">Ser. Tax (10.3%)</th>
-                <th scope="col">WCT @ (8.00%)</th>
-                <th scope="col">Amount incl. Tax</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>SERVICING CHARGES</td>
-                <td>00000030</td>
-                <td>Paid</td>
-                <td>3.50</td>
-                <td class="text-right">150</td>
-                <td></td>
-                <td class="text-right">525.00</td>
-                <td class="text-right">54.08</td>
-                <td></td>
-                <td class="text-right">579.08</td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Washing</td>
-                <td>00000002</td>
-                <td>Paid</td>
-                <td>3.50</td>
-                <td class="text-right">186</td>
-                <td></td>
-                <td class="text-right">651.00</td>
-                <td class="text-right">67.05</td>
-                <td></td>
-                <td class="text-right">718.05</td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>VAS Scaning</td>
-                <td>00000010</td>
-                <td>Paid</td>
-                <td>3.50</td>
-                <td class="text-right">114</td>
-                <td></td>
-                <td class="text-right">399.00</td>
-                <td class="text-right">41.10</td>
-                <td></td>
-                <td class="text-right">440.10</td>
-            </tr>
-            <tr>
-                <th scope="row">4</th>
-                <td>CONSUMABLE</td>
-                <td>00000003</td>
-                <td>Paid</td>
-                <td>3.50</td>
-                <td class="text-right">100</td>
-                <td></td>
-                <td class="text-right">350.00</td>
-                <td class="text-right">36.05</td>
-                <td></td>
-                <td class="text-right">386.05</td>
-            </tr>
-            <tr>
-                <th scope="row">5</th>
-                <td>brake cleaning</td>
-                <td>2525</td>
-                <td>Paid</td>
-                <td>3.50</td>
-                <td class="text-right">129</td>
-                <td></td>
-                <td class="text-right">451.50</td>
-                <td class="text-right">46.50</td>
-                <td></td>
-                <td class="text-right">498.00</td>
-            </tr>
-        </tbody>
-        <tfoot>
-            <tr>
-                <td class="text-right" colspan="8"><strong>2,376.50</strong></td>
-                <td class="text-right"><strong>244.78</strong></td>
-                <td class="text-right" colspan="2"><strong>2,621.28</strong></td>
-            </tr>
-        </tfoot>
-    </table>
-
-    <h3 class="mt-5 text-center">Parts Details</h3>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th scope="col">S. No.</th>
-                <th scope="col">Description</th>
-                <th scope="col">Part No.</th>
-                <th scope="col">Category</th>
-                <th scope="col">Rate</th>
-                <th scope="col">Qty.</th>
-                <th scope="col"></th>
-                <th scope="col">Amount</th>
-                <th scope="col">Ser. Tax (10.3%)</th>
-                <th scope="col">WCT @ (8.00%)</th>
-                <th scope="col">Amount incl. Tax</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Oil Filter</td>
-                <td>03L115562</td>
-                <td>Paid</td>
-                <td>1</td>
-                <td class="text-right">327.11</td>
-                <td></td>
-                <td class="text-right">100.00</td>
-                <td class="text-right">327.11</td>
-                <td class="text-right">12.50></td>
-                <td class="text-right">40.89</td>
-                <td class="text-right">368.00</td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>AIR FILTER</td>
-                <td>6R0129620A</td>
-                <td>Paid</td>
-                <td>1</td>
-                <td class="text-right">275.56</td>
-                <td></td>
-                <td class="text-right">100.00</td>
-                <td class="text-right">275.56</td>
-                <td class="text-right">12.50></td>
-                <td class="text-right">34.45</td>
-                <td class="text-right">310.01</td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>PLUG WITH</td>
-                <td>N 90813202</td>
-                <td>Paid</td>
-                <td>1</td>
-                <td class="text-right">67.36</td>
-                <td></td>
-                <td class="text-right">100.00</td>
-                <td class="text-right">67.36</td>
-                <td class="text-right">12.50></td>
-                <td class="text-right">8.42</td>
-                <td class="text-right">75.78</td>
-            </tr>
-            <tr>
-                <th scope="row">4</th>
-                <td>WINDSHIELD CLEANER CO</td>
-                <td>G 052164M1</td>
-                <td>Paid</td>
-                <td>1</td>
-                <td class="text-right">226.98</td>
-                <td></td>
-                <td class="text-right">100.00</td>
-                <td class="text-right">226.98</td>
-                <td class="text-right">12.50></td>
-                <td class="text-right">28.37</td>
-                <td class="text-right">255.35</td>
-            </tr>
-            <tr>
-                <th scope="row">5</th>
-                <td>CASTROL ENGINE OIL 4LT</td>
-                <td>LP-5W40-4</td>
-                <td>Paid</td>
-                <td>1</td>
-                <td class="text-right">3,342.23</td>
-                <td></td>
-                <td class="text-right">100.00</td>
-                <td class="text-right">3,342.23</td>
-                <td class="text-right">12.50></td>
-                <td class="text-right">417.78</td>
-                <td class="text-right">3,760.01</td>
-            </tr>
-            <tr>
-                <th scope="row">5</th>
-                <td>CASTROL ENGINE OIL 1LT</td>
-                <td>LP-5W40-1</td>
-                <td>Paid</td>
-                <td>1</td>
-                <td class="text-right">862.23</td>
-                <td></td>
-                <td class="text-right">100.00</td>
-                <td class="text-right">862.23</td>
-                <td class="text-right">12.50></td>
-                <td class="text-right">107.78</td>
-                <td class="text-right">970.01</td>
-            </tr>
-            <tr>
-                <th scope="row">5</th>
-                <td>DUST AND POLLEN FILTER</td>
-                <td>6Q0820367B</td>
-                <td>Paid</td>
-                <td>1</td>
-                <td class="text-right">635.47</td>
-                <td></td>
-                <td class="text-right">100.00</td>
-                <td class="text-right">635.47</td>
-                <td class="text-right">12.50></td>
-                <td class="text-right">79.43</td>
-                <td class="text-right">714.90</td>
-            </tr>
-        </tbody>
-        <tfoot>
-            <tr>
-                <td class="text-right" colspan="9"><strong>5,736.94</strong></td>
-                <td class="text-right" colspan="2"><strong>717.12</strong></td>
-                <td class="text-right"><strong>6,454.06</strong></td>
-            </tr>
-            <tr>
-                <td colspan="12">
-                    <div class="d-flex justify-content-end">
-                        <div class="d-block">
-                            <p class="d-inline lead"><strong>Total Parts And Labor</strong></p>
-                            <p class="d-inline lead">9.075.00</p>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="12">
-                    <div class="justify-content-start">
-                        <div class="d-block">
-                            <p class="d-inline lead"><strong>Rupees:</strong></p>
-                            <p class="d-inline lead">NINE THOUSAND SEVENTY FIVE RUPEES AND ZERO PAISA ONLY</p>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </tfoot>
-    </table>
-    <% if (invoiceType !== 'processed') { %>
-        <button type="button" id="process_button" class="btn btn-primary float-right">Process</button>
-    <% } %>-->
 </section>
 
